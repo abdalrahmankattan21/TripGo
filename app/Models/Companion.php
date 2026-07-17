@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Companion extends Model
 {
-    protected $fillable = ['name', 'national_id', 'birth_date',  'booking_id', 'waiting_list_id'];
+    protected $fillable = ['name', 'national_id', 'booking_id', 'waiting_list_id'];
 
     public function booking() : BelongsTo {
         return $this->belongsTo(Booking::class);

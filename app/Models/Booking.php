@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
 {
-    use HasFactory;
     protected $fillable = ['user_id', 'trip_id', 'seats', 'total_price', 'status', 'booked_at', 'cancelled_at', 'cancellation_reason'];
 
     public function user() : BelongsTo  {
@@ -22,5 +21,9 @@ class Booking extends Model
 
     public function companions() : HasMany {
         return $this->hasMany(Companion::class);
+    }
+
+    public function payment() : HasOne {
+        return $this->hasOne(Payment::class);
     }
 }

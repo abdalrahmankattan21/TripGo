@@ -57,7 +57,6 @@ class WaitingListSeeder extends Seeder
                     Companion::create([
                         'name' => fake()->name(),
                         'national_id' => fake()->unique()->randomNumber(9),
-                        'birth_date' => fake()->date(),
                         'booking_id' => 1,
                     ]);
                 }

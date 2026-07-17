@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         CategorySeeder::class,
         TripSeeder::class,
         BookingSeeder::class,
-        CompanionSeeder::class,
         FullTripSeeder::class,
         WaitingListSeeder::class
         ]);
