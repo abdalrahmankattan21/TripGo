@@ -6,5 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guide extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'languages',
+        'status',
+    ];
+    protected $casts = [
+        'languages' => 'array',
+    ];
+
+    public function trips()
+    {
+        return $this->belongsToMany(Trip::class);
+    }
 }
