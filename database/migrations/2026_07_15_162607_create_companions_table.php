@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('national_id')->nullable();
-            $table->date('birth_date');
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

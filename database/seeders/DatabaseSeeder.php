@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         GuideSeeder::class,
         Guide_TripSeeder::class,
         BookingSeeder::class,
-        CompanionSeeder::class,
         FullTripSeeder::class,
         WaitingListSeeder::class,
         ReviewSeeder::class,

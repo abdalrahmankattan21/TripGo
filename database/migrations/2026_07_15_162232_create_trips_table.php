@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('title');
             $table->string('description');
             $table->string('departure_point');
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->integer('total_seats');
             $table->integer('available_seats');
             $table->decimal('price',10,2);
-            $table->enum('status', ['active', 'full', 'cancelled', 'completed'])->default('active');
+            $table->enum('status', ['scheduled', 'in-progress', 'completed'])->default('scheduled');
             $table->foreignId('destination_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
 

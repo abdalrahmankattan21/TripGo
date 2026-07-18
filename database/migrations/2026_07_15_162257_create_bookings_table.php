@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('trip_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('seats');
-            $table->decimal('total_price', 8, 2);
-            $table->enum('status', ['cancelled', 'confirmed'])->default('confirmed');
+            $table->decimal('total_price', 10, 2);
+            $table->enum('status', ['cancelled', 'confirmed', 'pending_payment'])->default('confirmed');
             $table->dateTime('booked_at');
             $table->dateTime('cancelled_at')->nullable();
             $table->text('cancellation_reason')->nullable();

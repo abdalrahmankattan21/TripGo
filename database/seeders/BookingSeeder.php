@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Booking;
 use App\Models\Companion;
+use App\Models\Payment;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -72,7 +73,6 @@ class BookingSeeder extends Seeder
 
                     Companion::create([
                         'booking_id' => $booking->id,
-                        'birth_date' => fake()->date(),
                         'name' => fake()->name(),
                         'national_id' => fake()->unique()->randomNumber(9),
                         'created_at' => now(),
@@ -107,8 +107,7 @@ class BookingSeeder extends Seeder
 
             $seats = rand(1, 5);
             $bookedAt = now();
-            Booking::create([
-
+            $booking = Booking::create([
                 'user_id' => $user->id,
                 'trip_id' => $trip->id,
                 'seats' => $seats,
@@ -121,6 +120,11 @@ class BookingSeeder extends Seeder
                 ),
                 'cancellation_reason' => fake()->paragraph(),
 
+            ]);
+
+            Payment::create([
+                "amount" => $seats * $trip->price,
+                "booking_id" => $booking->id,
             ]);
             $created++;
         }

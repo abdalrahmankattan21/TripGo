@@ -1,11 +1,671 @@
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* ==========================================================================
+   Trip Admin — Design System
+   A travel/ticketing-inspired look for the admin back office: chart-paper
+   backgrounds, ink typography, and a "ticket stub" motif (perforated edges,
+   punched holes) used sparingly on stat cards and page headers.
+   ========================================================================== */
+
+/* ---- Tokens -------------------------------------------------------------- */
+:root {
+    --ink: #16232b;
+    --ink-soft: rgba(22, 35, 43, 0.64);
+    --ink-faint: rgba(22, 35, 43, 0.12);
+    --paper: #eef0ea;
+    --surface: #ffffff;
+    --brass: #c98a3d;
+    --brass-dark: #a66e2a;
+    --pine: #3f7d5c;
+    --pine-tint: #e4eee8;
+    --oxide: #b8433d;
+    --oxide-tint: #f5e4e2;
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --shadow-card:
+        0 1px 2px rgba(22, 35, 43, 0.06), 0 1px 0 rgba(22, 35, 43, 0.04);
+}
+
+/* ---- Base ------------------------------------------------------------ */
+.admin-body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+.admin-body a {
+    /* color: inherit; */
+}
+
+.admin-body :focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-body * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ---- Shell / Sidebar --------------------------------------------------- */
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    position: relative;
+    width: 15rem;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: rgba(255, 255, 255, 0.82);
+    padding-bottom: 2rem;
+}
+
+/* Perforated edge — the ticket-stub tear line between sidebar and content */
+.admin-sidebar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1px;
+    bottom: 0;
+    width: 2px;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        var(--brass) 0 6px,
+        transparent 6px 14px
+    );
+}
+
+.admin-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.admin-brand__mark {
+    color: var(--brass);
+    font-size: 1rem;
+}
+
+.admin-nav {
+    margin-top: 1rem;
+    padding: 0 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.admin-nav-link {
+    display: block;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.68);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition:
+        background-color 120ms ease,
+        color 120ms ease;
+}
+
+.admin-nav-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+
+.admin-nav-link.is-active {
+    background: rgba(201, 138, 61, 0.16);
+    color: #fff;
+    border-left-color: var(--brass);
+}
+
+/* ---- Header / Breadcrumb ------------------------------------------------ */
+.admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admin-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--ink-faint);
+    padding: 1.1rem 2rem;
+}
+
+.admin-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.admin-breadcrumb {
+    margin-top: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.admin-breadcrumb a {
+    text-decoration: none;
+    color: var(--ink-soft);
+}
+
+.admin-breadcrumb a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+.admin-breadcrumb__current {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+/* ---- User menu ---------------------------------------------------------- */
+.admin-user-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.admin-user-trigger:hover {
+    color: var(--ink);
+}
+
+/* ---- Alerts --------------------------------------------------------- */
+.admin-alert {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid transparent;
+}
+
+.admin-alert--success {
+    background: var(--pine-tint);
+    border-color: rgba(63, 125, 92, 0.28);
+    color: #244a35;
+}
+
+.admin-alert--error {
+    background: var(--oxide-tint);
+    border-color: rgba(184, 67, 61, 0.28);
+    color: #7a2c27;
+}
+
+.admin-alert ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+/* ---- Stat cards (signature ticket-stub motif) --------------------------- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 1.25rem 1.25rem 1rem;
+    overflow: hidden;
+}
+
+/* Inner dashed perforation */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px dashed var(--ink-faint);
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+}
+
+/* Punched hole notch on the top edge */
+.stat-card::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 1.25rem;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--ink-faint);
+}
+
+.stat-card__label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.stat-card__value {
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.stat-section-title {
+    margin: 2rem 0 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+/* ---- Panels (form / table containers) ------------------------------- */
+.admin-panel {
+    background: var(--surface);
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.admin-panel--padded {
+    padding: 1.5rem;
+}
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.admin-search {
+    width: 100%;
+    max-width: 20rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    background: var(--surface);
+    font-family: var(--font-body);
+}
+
+.admin-search:focus {
+    border-color: var(--brass);
+}
+
+/* ---- Filter bar (trips) ---------------------------------------------- */
+.filter-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.9rem;
+    align-items: end;
+    margin-bottom: 1.25rem;
+}
+
+.filter-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
+}
+
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* ---- Buttons ----------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease;
+}
+
+.btn--primary {
+    background: var(--brass);
+    color: #fff;
+}
+
+.btn--primary:hover {
+    background: var(--brass-dark);
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: var(--ink-faint);
+    color: var(--ink);
+}
+
+.btn--ghost:hover {
+    border-color: var(--ink-soft);
+}
+
+.link-action {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.link-action--edit {
+    color: var(--brass-dark);
+}
+.link-action--edit:hover {
+    text-decoration: underline;
+}
+
+.link-action--view {
+    color: var(--ink-soft);
+}
+.link-action--view:hover {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+.link-action--danger {
+    color: var(--oxide);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+.link-action--danger:hover {
+    text-decoration: underline;
+}
+
+/* ---- Forms --------------------------------------------------------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-field--full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    width: 100%;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: var(--brass);
+}
+
+.form-file {
+    font-size: 0.85rem;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+}
+
+.form-thumb {
+    width: 5.5rem;
+    height: 5.5rem;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--ink-faint);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+}
+
+/* ---- Tables (manifest / ledger style) ----------------------------------- */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.admin-table thead th {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 2px solid var(--brass);
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--ink-faint);
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:nth-child(even) {
+    background: rgba(22, 35, 43, 0.02);
+}
+
+.admin-table tbody tr:hover {
+    background: var(--pine-tint);
+}
+
+.admin-table .is-numeric,
+.admin-table .is-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-table .actions-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+}
+
+/* ---- Status badges -------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.badge--neutral {
+    background: var(--ink-faint);
+    color: var(--ink);
+}
+.badge--info {
+    background: #e1e9f0;
+    color: #294a6b;
+}
+.badge--warn {
+    background: #f6e9d3;
+    color: #7a5218;
+}
+.badge--success {
+    background: var(--pine-tint);
+    color: #244a35;
+}
+.badge--danger {
+    background: var(--oxide-tint);
+    color: #7a2c27;
+}
+.badge--purple {
+    background: #eae3f3;
+    color: #52357a;
+}
+
+/* ---- Detail view --------------------------------------------------------- */
+.detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 1.75rem;
+}
+
+.detail-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.detail-panel__title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+}
+
+.detail-grid {
+    margin-top: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    row-gap: 0.75rem;
+    column-gap: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.detail-grid dt {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.detail-grid dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-mono);
+}
+
+.detail-image {
+    width: 100%;
+    max-height: 16rem;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+}
+
+/* ---- Responsive ---------------------------------------------------- */
+@media (max-width: 768px) {
+    .admin-shell {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+    }
+
+    .admin-sidebar::after {
+        display: none;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-content {
+        padding: 1.25rem;
+    }
 }

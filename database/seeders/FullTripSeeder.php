@@ -30,7 +30,6 @@ class FullTripSeeder extends Seeder
         // Create Full Trip
 
             $trip = Trip::create([
-                'name' => "Full Trip to Paris",
                 'title' => "Full Trip ",
                 'description' => 'Enjoy a wonderful trip to Paris.',
                 'departure_point' => fake()->address(),
@@ -42,7 +41,7 @@ class FullTripSeeder extends Seeder
                 'total_seats' => 5,
                 'available_seats' => 5,
                 'price' => fake()->numberBetween(100,200),
-                'status' => 'active',
+                'status' => 'scheduled',
                 'destination_id' => Destination::inRandomOrder()->value('id'),
                 'category_id'=> Category::inRandomOrder()->value('id') ,
             ]);
@@ -82,7 +81,6 @@ class FullTripSeeder extends Seeder
                 for ($i = 0; $i < $data['seats'] - 1; $i++) {
                     Companion::create([
                         'booking_id' => $booking->id,
-                        'birth_date' => fake()->date(),
                         'name' => fake()->name(),
                         'national_id' => fake()->unique()->randomNumber(9),
                         'created_at' => now(),

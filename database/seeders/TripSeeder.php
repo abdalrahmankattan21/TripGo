@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Destination;
+use App\Models\Trip;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,27 +17,32 @@ class TripSeeder extends Seeder
      */
 public function run(): void
 {
-    $dest = \App\Models\Destination::first();
-    $cat = \App\Models\Category::first();
 
-    if ($dest && $cat) {
-        DB::table('trips')->insert([
-            'name' => 'رحلة باريس',
-            'title' => 'رحلة استكشاف باريس',
-            'description' => 'زيارة برج إيفل ومتحف اللوفر',
-            'departure_point' => json_encode(['المطار', 'المدينة القديمة']),
-            'start_date' => now()->addDays(10),
-            'end_date' => now()->addDays(20),
-            'booking_cancel_deadline' => now()->addDays(5),
-            'total_seats' => 20,
-            'available_seats' => 20,
-            'price' => 1500.00,
-            'status' => 'active',
-            'destination_id' => $dest->id,
-            'category_id' => $cat->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $trips = [];
+        for ($i = 0; $i < 10; $i++) {
+        $startDate = Carbon::now()->addDays(($i * 7) + 10);
+        $endDate = (clone $startDate)->addDays(rand(5, 8));
+        $totalSeats = rand(15, 30);
+
+        $trips[$i] =
+            [
+                'title' =>  "Trip " . $i + 1,
+                'description' => fake()->paragraph(),
+                'departure_point' => fake()->address(),
+                'destination_id' => Destination::inRandomOrder()->value('id'),
+                'category_id'=> Category::inRandomOrder()->value('id') ,
+                'price' => fake()->numberBetween(100,200),
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'booking_cancel_deadline' => (clone $endDate)->subDays(2),
+                'total_seats' => $totalSeats,
+                'available_seats' => $totalSeats,
+                'status' => 'scheduled',
+            ];
+        }
+        foreach($trips as $trip) {
+            Trip::create($trip);
+
     }
 }
 }

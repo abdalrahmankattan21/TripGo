@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Trip extends Model
 {
-    protected $casts = [
-    'start_date' => 'datetime',
-    ];
-
-    protected $fillable = ['title', 'description', 'image', 'price', 'start_date', 'total_seats', 'available_seats', 'departure_points', 'status', 'destination_id', 'category_id'];
+    protected $fillable = ['title', 'description', 'start_date', 'end_date', 'departure_point', 'booking_cancel_deadline', 'destination_id', 'category_id','total_seats', 'available_seats','price', 'status'];
 
     public function destination()
 {
@@ -22,6 +18,8 @@ public function category()
     return $this->belongsTo(Category::class);
 }
 
+public function bookings() {
+    return $this->hasMany(Booking::class);
 public function guide()
 {
     return $this->belongsToMany(Guide::class);
