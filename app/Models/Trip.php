@@ -21,4 +21,9 @@ public function category()
 {
     return $this->belongsTo(Category::class);
 }
+
+public function guide()
+{
+    return $this->belongsToMany(Guide::class);
+}
 }

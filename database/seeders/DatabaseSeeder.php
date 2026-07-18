@@ -19,10 +19,13 @@ class DatabaseSeeder extends Seeder
         DestinationSeeder::class,
         CategorySeeder::class,
         TripSeeder::class,
+        GuideSeeder::class,
+        Guide_TripSeeder::class,
         BookingSeeder::class,
         CompanionSeeder::class,
         FullTripSeeder::class,
-        WaitingListSeeder::class
+        WaitingListSeeder::class,
+        ReviewSeeder::class,
         ]);
     }
 }
