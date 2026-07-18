@@ -6,5 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',
+        'trip_id',
+        'rating',
+        'comment',
+    ];
+
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
