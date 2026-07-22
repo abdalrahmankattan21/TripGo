@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'email' => "admin@gmail.com",
             'phone' => fake()->phoneNumber(),
             'password' => Hash::make("admin"),
-            'role' => 1
+            'is_admin' => 1
         ]);
 
         // Normal users
