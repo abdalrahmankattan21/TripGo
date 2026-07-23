@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\WaitingListController;
@@ -23,3 +24,11 @@ Route::get('/waiting-lists', [WaitingListController::class, 'index']);
 Route::get('/waiting-lists/{waitingList}', [WaitingListController::class, 'show']);
 Route::delete('/waiting-lists/{waitingList}', [WaitingListController::class, 'destroy']);
 });
+=======
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+>>>>>>> main
