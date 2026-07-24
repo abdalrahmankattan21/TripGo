@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\Admin\AdminGuideController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,11 +25,12 @@ require __DIR__.'/auth.php';
 Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // Dashboard
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    });
-use App\Http\Controllers\Admin\AdminBookingController;
+        // إدارة الحجوزات
+        Route::resource('bookings', AdminBookingController::class);
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('bookings', AdminBookingController::class);
-});
+        // إدارة المرشدين
+        Route::resource('guides', AdminGuideController::class);
+    });
