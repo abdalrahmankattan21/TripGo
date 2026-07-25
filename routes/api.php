@@ -1,10 +1,11 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\WaitingListController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 // Auth Routes
 Route::post('register', [AuthController::class, 'register']);
@@ -24,11 +25,18 @@ Route::get('/waiting-lists', [WaitingListController::class, 'index']);
 Route::get('/waiting-lists/{waitingList}', [WaitingListController::class, 'show']);
 Route::delete('/waiting-lists/{waitingList}', [WaitingListController::class, 'destroy']);
 });
-=======
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
+
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
->>>>>>> main
