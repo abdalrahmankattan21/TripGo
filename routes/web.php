@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDestinationController;
 use App\Http\Controllers\ProfileController;
@@ -24,4 +25,5 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('destinations', AdminDestinationController::class);
+        Route::resource('categories', AdminCategoryController::class);
     });

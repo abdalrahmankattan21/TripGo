@@ -23,6 +23,7 @@
                 $links = [
                     'admin.dashboard' => 'Dashboard',
                     'admin.destinations.index' => 'Destinations',
+                    'admin.categories.index' => 'Categories',
                 ];
             @endphp
             @foreach ($links as $route => $label)

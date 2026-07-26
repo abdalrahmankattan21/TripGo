@@ -8,7 +8,16 @@ class Category extends Model
 {
     protected $fillable = ['name'];
     public function trips()
-{
-    return $this->hasMany(Trip::class);
-}
+    {
+        return $this->hasMany(Trip::class);
+    }
+    public function scopeSearch($query, ?string $search)
+    {
+        if (blank($search)) {
+            return $query;
+        }
+
+        return $query->where('name', 'like', "%{$search}%");
+
+    }
 }
