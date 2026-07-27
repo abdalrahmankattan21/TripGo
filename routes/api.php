@@ -2,8 +2,17 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DestinationController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\WaitingListController;
 use Illuminate\Support\Facades\Route;
+
+// Public Routes
+Route::get('/destinations', [DestinationController::class, 'index']);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/trips', [TripController::class, 'index']);
+Route::get('/trips/{trip}', [TripController::class, 'show']);
 
 // Auth Routes
 Route::post('register', [AuthController::class, 'register']);
