@@ -3,55 +3,42 @@
 namespace App\Services\Admin;
 
 use App\Models\Guide;
-use Illuminate\Http\Request;
 
 class AdminGuideService
 {
-    // جلب المرشدين مع الفلاتر والبحث
-    public function getFilteredGuides(Request $request)
+    public function list($search = null)
     {
-        $query = Guide::query();
-
-        // فلترة حسب الحالة (status)
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // البحث حسب الاسم
-        if ($request->filled('name')) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
-        }
-
-        // البحث حسب البريد الإلكتروني
-        if ($request->filled('email')) {
-            $query->where('email', 'LIKE', '%' . $request->email . '%');
-        }
-
-        // البحث حسب رقم الهاتف
-        if ($request->filled('phone')) {
-            $query->where('phone', 'LIKE', '%' . $request->phone . '%');
-        }
-
-        return $query->latest()->paginate(10);
+        return Guide::withCount('trips')
+            ->Search($search)
+            ->latest()
+            ->paginate(15);
     }
 
-    public function getGuideById($id)
+    public function create(array $data)
     {
-        return Guide::findOrFail($id);
+        $tripIds = $data['trip_ids'] ?? [];
+        unset($data['trip_ids']);
+
+        $guide = Guide::create($data);
+        $guide->trips()->sync($tripIds);
+
+        return $guide->fresh('trips');
     }
 
-    public function createGuide(array $data)
+    public function update(Guide $guide, array $data)
     {
-        return Guide::create($data);
+        $tripIds = $data['trip_ids'] ?? [];
+        unset($data['trip_ids']);
+
+        $guide->update($data);
+        $guide->trips()->sync($tripIds);
+
+        return $guide->fresh('trips');
     }
 
-    public function updateGuide(Guide $guide, array $data)
+    public function delete(Guide $guide)
     {
-        return $guide->update($data);
-    }
-
-    public function deleteGuide(Guide $guide)
-    {
-        return $guide->delete();
+        $guide->trips()->detach();
+        $guide->delete();
     }
 }

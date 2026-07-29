@@ -30,9 +30,6 @@ Route::prefix('admin')
         Route::resource('destinations', AdminDestinationController::class);
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('trips', AdminTripController::class);
-         // إدارة الحجوزات
         Route::resource('bookings', AdminBookingController::class);
-
-        // إدارة المرشدين
         Route::resource('guides', AdminGuideController::class);
     });
