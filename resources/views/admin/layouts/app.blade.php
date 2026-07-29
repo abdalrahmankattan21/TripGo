@@ -24,6 +24,9 @@
                     'admin.dashboard' => 'Dashboard',
                     'admin.destinations.index' => 'Destinations',
                     'admin.categories.index' => 'Categories',
+                    'admin.trips.index' => 'Trips',
+                    'admin.bookings.index' => 'Bookings',
+                    'admin.guides.index' => 'Guides',
                 ];
             @endphp
             @foreach ($links as $route => $label)

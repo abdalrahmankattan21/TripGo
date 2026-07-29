@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DestinationController;
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\WaitingListController;
-use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
