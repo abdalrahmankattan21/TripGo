@@ -26,8 +26,8 @@ public function run(): void
 
         $trips[$i] =
             [
-                'title' =>  "Trip " . $i + 1,
-                'description' => fake()->paragraph(),
+                'title' =>  "Trip " . ($i + 1),
+                'description' => fake()->text(),
                 'departure_point' => fake()->address(),
                 'destination_id' => Destination::inRandomOrder()->value('id'),
                 'category_id'=> Category::inRandomOrder()->value('id') ,

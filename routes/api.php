@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DestinationController;
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\WaitingListController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 // Public Routes
 Route::get('/destinations', [DestinationController::class, 'index']);
@@ -32,3 +34,18 @@ Route::get('/waiting-lists', [WaitingListController::class, 'index']);
 Route::get('/waiting-lists/{waitingList}', [WaitingListController::class, 'show']);
 Route::delete('/waiting-lists/{waitingList}', [WaitingListController::class, 'destroy']);
 });
+
+
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');

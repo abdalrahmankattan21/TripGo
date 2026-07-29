@@ -20,8 +20,9 @@ public function category()
 
 public function bookings() {
     return $this->hasMany(Booking::class);
-public function guide()
+}
+public function guides()
 {
-    return $this->belongsToMany(Guide::class);
+    return $this->belongsToMany(Guide::class, 'guide_trip', 'trip_id', 'guide_id');
 }
 }
