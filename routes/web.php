@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDestinationController;
 use App\Http\Controllers\Admin\AdminGuideController;
 use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminTripController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,12 @@ Route::prefix('admin')
         Route::resource('trips', AdminTripController::class);
         Route::resource('bookings', AdminBookingController::class);
         Route::resource('guides', AdminGuideController::class);
+
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('pilgrims-revenue', [AdminReportController::class, 'pilgrimsRevenue'])->name('pilgrims-revenue');
+            Route::get('popular-destinations', [AdminReportController::class, 'popularDestinations'])->name('popular-destinations');
+            Route::get('load-factor', [AdminReportController::class, 'loadFactor'])->name('load-factor');
+            Route::get('monthly-revenue', [AdminReportController::class, 'monthlyRevenue'])->name('monthly-revenue');
+            Route::get('cancellations', [AdminReportController::class, 'cancellations'])->name('cancellations');
+        });
     });

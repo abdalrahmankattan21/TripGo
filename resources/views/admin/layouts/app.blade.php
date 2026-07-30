@@ -28,6 +28,14 @@
                     'admin.bookings.index' => 'Bookings',
                     'admin.guides.index' => 'Guides',
                 ];
+
+                $reportLinks = [
+                    'admin.reports.pilgrims-revenue' => 'Pilgrims and Revenue',
+                    'admin.reports.popular-destinations' => 'Most Popular Destinations',
+                    'admin.reports.load-factor' => 'Flight Load Factor',
+                    'admin.reports.monthly-revenue' => 'Monthly Revenue',
+                    'admin.reports.cancellations' => 'Cancellation Reasons',
+                ];
             @endphp
             @foreach ($links as $route => $label)
                 <a href="{{ route($route) }}"
@@ -35,6 +43,25 @@
                     {{ $label }}
                 </a>
             @endforeach
+            <div x-data="{ open: {{ request()->routeIs('admin.reports.*') ? 'true' : 'false' }} }">
+                <button type="button" @click="open = !open"
+                        class="admin-nav-toggle {{ request()->routeIs('admin.reports.*') ? 'is-active' : '' }}">
+                    <span>Reports</span>
+                    <svg class="admin-nav-toggle__chevron" :class="{ 'is-open': open }"
+                         width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-transition class="admin-nav-sub">
+                    @foreach ($reportLinks as $route => $label)
+                        <a href="{{ route($route) }}"
+                           class="admin-nav-sub-link {{ request()->routeIs($route) ? 'is-active' : '' }}">
+                            {{ $label }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         </nav>
     </aside>
 

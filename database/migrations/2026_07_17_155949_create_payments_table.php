@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->decimal("amount",10,2);
+            $table->enum('status', ['paid', 'refund']);
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

@@ -28,6 +28,14 @@
                     'admin.bookings.index' => 'Bookings',
                     'admin.guides.index' => 'Guides',
                 ];
+
+                $reportLinks = [
+                    'admin.reports.pilgrims-revenue' => 'Pilgrims and Revenue',
+                    'admin.reports.popular-destinations' => 'Most Popular Destinations',
+                    'admin.reports.load-factor' => 'Flight Load Factor',
+                    'admin.reports.monthly-revenue' => 'Monthly Revenue',
+                    'admin.reports.cancellations' => 'Cancellation Reasons',
+                ];
             ?>
             <?php $__currentLoopData = $links; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $route => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <a href="<?php echo e(route($route)); ?>"
@@ -36,6 +44,26 @@
 
                 </a>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <div x-data="{ open: <?php echo e(request()->routeIs('admin.reports.*') ? 'true' : 'false'); ?> }">
+                <button type="button" @click="open = !open"
+                        class="admin-nav-toggle <?php echo e(request()->routeIs('admin.reports.*') ? 'is-active' : ''); ?>">
+                    <span>Reports</span>
+                    <svg class="admin-nav-toggle__chevron" :class="{ 'is-open': open }"
+                         width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-transition class="admin-nav-sub">
+                    <?php $__currentLoopData = $reportLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $route => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route($route)); ?>"
+                           class="admin-nav-sub-link <?php echo e(request()->routeIs($route) ? 'is-active' : ''); ?>">
+                            <?php echo e($label); ?>
+
+                        </a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </div>
         </nav>
     </aside>
 
