@@ -1,113 +1,87 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الحجوزات</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fc; padding: 20px; }
-        .container { max-width: 1300px; margin: auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 15px; }
-        .filters { display: flex; flex-wrap: wrap; gap: 12px; background: #f1f5f9; padding: 20px; border-radius: 10px; margin-bottom: 25px; align-items: center; }
-        .filters select, .filters input { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: white; min-width: 130px; }
-        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; color: white; font-weight: bold; transition: 0.3s; }
-        .btn-primary { background: #3498db; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-warning { background: #f39c12; }
-        .btn-warning:hover { background: #d68910; }
-        .btn-danger { background: #e74c3c; }
-        .btn-danger:hover { background: #c0392b; }
-        .btn-sm { padding: 5px 10px; font-size: 13px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { background: #2c3e50; color: white; padding: 12px; text-align: center; }
-        td { padding: 12px; text-align: center; border-bottom: 1px solid #ecf0f1; }
-        tr:hover { background: #f8f9fa; }
-        .badge { padding: 5px 12px; border-radius: 20px; color: white; font-size: 13px; font-weight: bold; }
-        .badge-pending { background: #f39c12; }
-        .badge-confirmed { background: #27ae60; }
-        .badge-cancelled { background: #e74c3c; }
-        .actions form { display: inline-block; margin: 0; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>📋 إدارة الحجوزات</h1>
+@extends('admin.layouts.app')
 
-    {{-- فلترة الحجوزات --}}
-    <form method="GET" action="{{ route('admin.bookings.index') }}" class="filters">
-        <select name="status">
-            <option value="">كل الحالات</option>
-            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>قيد الانتظار</option>
-            <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>مؤكد</option>
-            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>ملغي</option>
-        </select>
+@section('title', 'Bookings')
 
-        <select name="trip_id">
-            <option value="">كل الرحلات</option>
-            @foreach($trips as $trip)
-                <option value="{{ $trip->id }}" {{ request('trip_id') == $trip->id ? 'selected' : '' }}>{{ $trip->title }}</option>
-            @endforeach
-        </select>
+@section('breadcrumbs')
+    <x-admin.breadcrumb :items="[
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Bookings'],
+    ]"/>
+@endsection
 
-        <select name="user_id">
-            <option value="">كل المستخدمين</option>
-            @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-            @endforeach
-        </select>
+@section('content')
+    <form method="GET" action="{{ route('admin.bookings.index') }}" class="admin-panel admin-panel--padded filter-bar">
+        <div class="filter-field">
+            <label for="trip_id">Trip</label>
+            <select id="trip_id" name="trip_id" class="form-select">
+                <option value="">All</option>
+                @foreach ($trips as $trip)
+                    <option value="{{ $trip->id }}" @selected(($filters['trip_id'] ?? null) == $trip->id)>{{ $trip->title }}</option>
+                @endforeach
+            </select>
+        </div>
 
-        <input type="date" name="booking_date" value="{{ request('booking_date') }}" placeholder="تاريخ الحجز">
-        <input type="date" name="start_date" value="{{ request('start_date') }}" placeholder="تاريخ الانطلاق">
+        <div class="filter-field">
+            <label for="status">Status</label>
+            <select id="status" name="status" class="form-select">
+                <option value="">All</option>
+                @foreach (['pending_payment', 'confirmed', 'cancelled'] as $status)
+                    <option value="{{ $status }}" @selected(($filters['status'] ?? null) === $status)>
+                        {{ ucfirst(str_replace('_', ' ', $status)) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-        <button type="submit" class="btn btn-primary">فلترة</button>
-        <a href="{{ route('admin.bookings.index') }}" class="btn btn-warning">إلغاء الفلترة</a>
+        <div class="filter-field">
+            <label for="date_from">Booked From</label>
+            <input id="date_from" type="date" name="date_from" value="{{ $filters['date_from'] ?? '' }}" class="form-input">
+        </div>
+
+        <div class="filter-field">
+            <label for="date_to">Booked To</label>
+            <input id="date_to" type="date" name="date_to" value="{{ $filters['date_to'] ?? '' }}" class="form-input">
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn--primary">Filter</button>
+            <a href="{{ route('admin.bookings.index') }}" class="link-action link-action--view">Reset</a>
+        </div>
     </form>
 
-    {{-- جدول الحجوزات --}}
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>المستخدم</th>
-                <th>الرحلة</th>
-                <th>عدد المقاعد</th>
-                <th>السعر الإجمالي</th>
-                <th>الحالة</th>
-                <th>تاريخ الحجز</th>
-                <th>الإجراءات</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($bookings as $booking)
+
+    <div class="admin-panel table-wrap">
+        <table class="admin-table">
+            <thead>
                 <tr>
-                    <td>{{ $booking->id }}</td>
-                    <td>{{ $booking->user->name ?? 'غير معروف' }}</td>
-                    <td>{{ $booking->trip->title ?? 'غير معروف' }}</td>
-                    <td>{{ $booking->number_of_seats }}</td>
-                    <td>${{ number_format($booking->total_price, 2) }}</td>
-                    <td>
-                        <span class="badge badge-{{ $booking->status }}">
-                            {{ $booking->status == 'pending' ? 'قيد الانتظار' : ($booking->status == 'confirmed' ? 'مؤكد' : 'ملغي') }}
-                        </span>
-                    </td>
-                    <td>{{ optional($booking->booking_date)->format('Y-m-d') ?? 'غير محدد' }}</td>
-                    <td class="actions">
-                        <a href="{{ route('admin.bookings.show', $booking->id) }}" class="btn btn-primary btn-sm">عرض</a>
-                        <a href="{{ route('admin.bookings.edit', $booking->id) }}" class="btn btn-warning btn-sm">تعديل</a>
-                        <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</button>
-                        </form>
-                    </td>
+                    <th>Pilgrim</th>
+                    <th>Trip</th>
+                    <th>Seats</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Booked At</th>
+                    <th class="actions-cell">Actions</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="8" style="padding: 40px; color: #95a5a6;">لا توجد حجوزات لعرضها حالياً</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
-</body>
-</html>
+            </thead>
+            <tbody>
+                @forelse ($bookings as $booking)
+                    <tr>
+                        <td>{{ $booking->user->name ?? 'N/A' }}</td>
+                        <td>{{ $booking->trip->title ?? 'N/A' }}</td>
+                        <td class="is-numeric">{{ $booking->seats }}</td>
+                        <td class="is-mono">{{ number_format($booking->total_price, 2) }}</td>
+                        <td><x-admin.status-badge :status="$booking->status"/></td>
+                        <td class="is-mono">{{ optional($booking->booked_at)->format('Y-m-d H:i') }}</td>
+                        <td class="actions-cell">
+                            <a href="{{ route('admin.bookings.show', $booking) }}" class="text-blue-600 hover:underline">View</a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" class="table-empty">No bookings found.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top:1rem">{{ $bookings->links() }}</div>
+@endsection

@@ -1,25 +1,40 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>تفاصيل المرشد</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fc; padding: 20px; }
-        .container { max-width: 700px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 15px; }
-        .info { padding: 12px 0; border-bottom: 1px solid #ecf0f1; display: flex; }
-        .label { font-weight: bold; width: 160px; color: #34495e; }
-        .back-link { display: inline-block; margin-top: 20px; color: #3498db; text-decoration: none; font-weight: bold; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1> تفاصيل المرشد #{{ $guide->id }}</h1>
-    <div class="info"><span class="label">الاسم:</span> {{ $guide->name }}</div>
-    <div class="info"><span class="label">البريد الإلكتروني:</span> {{ $guide->email }}</div>
-    <div class="info"><span class="label">رقم الهاتف:</span> {{ $guide->phone }}</div>
-    <div class="info"><span class="label">الحالة:</span> {{ $guide->status == 'active' ? 'نشط' : 'غير نشط' }}</div>
-    <a href="{{ route('admin.guides.index') }}" class="back-link">⬅ العودة إلى القائمة</a>
-</div>
-</body>
-</html>
+@extends('admin.layouts.app')
+
+@section('title', $guide->name)
+
+@section('breadcrumbs')
+    <x-admin.breadcrumb :items="[
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Tour Guides', 'url' => route('admin.guides.index')],
+        ['label' => $guide->name],
+    ]"/>
+@endsection
+
+@section('content')
+    <div class="detail-panel">
+        <div class="detail-panel__header">
+            <h2 class="detail-panel__title">{{ $guide->name }}</h2>
+        </div>
+
+        <dl class="detail-grid">
+            <div><dt>Email</dt><dd style="font-family:var(--font-body)">{{ $guide->email }}</dd></div>
+            <div><dt>Phone</dt><dd style="font-family:var(--font-body)">{{ $guide->phone ?? '—' }}</dd></div>
+        </dl>
+
+        @if ($guide->bio)
+            <p style="margin-top:1rem;color:var(--ink-soft)">{{ $guide->bio }}</p>
+        @endif
+
+        <h3 class="stat-section-title">Assigned Flights</h3>
+        @forelse ($guide->trips as $trip)
+            <span class="badge badge--info" style="margin-right:0.5rem;margin-bottom:0.5rem">{{ $trip->title }}</span>
+        @empty
+            <p style="color:var(--ink-soft);font-size:0.875rem">No flights assigned.</p>
+        @endforelse
+
+        <div style="margin-top:1.5rem">
+            <a href="{{ route('admin.guides.edit', $guide) }}" class="btn btn--primary">Edit</a>
+            <a href="{{ route('admin.guides.index') }}" class="btn btn--ghost">Back</a>
+        </div>
+    </div>
+@endsection

@@ -12,4 +12,5 @@ class Payment extends Model
     public function booking() : HasOne {
         return $this->hasOne(Booking::class);
     }
+
 }

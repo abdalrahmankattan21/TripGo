@@ -11,6 +11,12 @@ class Booking extends Model
 {
     protected $fillable = ['user_id', 'trip_id', 'seats', 'total_price', 'status', 'booked_at', 'cancelled_at', 'cancellation_reason'];
 
+    protected function casts(): array {
+        return [
+            'booked_at' => 'datetime',
+        ];
+    }
+
     public function user() : BelongsTo  {
         return $this->belongsTo(User::class);
     }

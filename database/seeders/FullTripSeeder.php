@@ -6,9 +6,9 @@ use App\Models\Booking;
 use App\Models\Category;
 use App\Models\Companion;
 use App\Models\Destination;
+use App\Models\Payment;
 use App\Models\Trip;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -34,9 +34,7 @@ class FullTripSeeder extends Seeder
                 'description' => 'Enjoy a wonderful trip to Paris.',
                 'departure_point' => fake()->address(),
                 'start_date' => now()->addDays(10),
-                'end_date' =>  now()
-                    ->addDays(10)
-                    ->addHours(5),
+                'end_date' =>  now()->addDays(10)->addHours(5),
                 'booking_cancel_deadline' => now(),
                 'total_seats' => 5,
                 'available_seats' => 5,
@@ -68,6 +66,13 @@ class FullTripSeeder extends Seeder
                     'status' => 'confirmed',
                     'booked_at' => fake()->dateTimeBetween($trip->created_at,$trip->start_date),
                 ]);
+
+                // Create Payment
+                Payment::create([
+                    'booking_id' => $booking->id,
+                    'amount' => $booking->total_price,
+                    'status' => 'paid',
+                    ]);
 
                 // Update available seats
 

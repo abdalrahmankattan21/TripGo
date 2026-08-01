@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone');
-            $table->string('languages')->nullable();
-            $table->string('status')->default('available');
+            $table->text('bio')->nullable();
             $table->timestamps();
         });
     }

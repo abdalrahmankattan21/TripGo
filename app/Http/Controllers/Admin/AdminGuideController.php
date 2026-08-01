@@ -3,76 +3,79 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\GuideRequest;
+use App\Http\Requests\guides\StoreGuideRequest;
+use App\Http\Requests\guides\UpdateGuideRequest;
+use App\Models\Guide;
+use App\Models\Trip;
 use App\Services\Admin\AdminGuideService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AdminGuideController extends Controller
 {
-    protected AdminGuideService $service;
-
-    public function __construct(AdminGuideService $service)
-    {
-        $this->service = $service;
+    private AdminGuideService $guideService;
+    public function __construct(AdminGuideService $guideService) {
+        $this->guideService = $guideService;
     }
 
     public function index(Request $request)
     {
-        $guides = $this->service->getFilteredGuides($request);
-        return view('admin.guides.index', compact('guides'));
-    }
-
-    public function show($id)
-    {
-        $guide = $this->service->getGuideById($id);
-        return view('admin.guides.show', compact('guide'));
+        return view('admin.guides.index', [
+            'guides' => $this->guideService->list($request->input('search') ? : null)
+        ]);
     }
 
     public function create()
     {
-        return view('admin.guides.create');
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:guides,email',
-            'phone' => 'required|string|max:20',
-            'status' => 'in:active,inactive',
+        return view('admin.guides.create', [
+            'trips' => Trip::orderBy('title')->get(['id', 'title']),
         ]);
-
-        $this->service->createGuide($data);
-
-        return redirect()->route('admin.guides.index')->with('success', 'تم إضافة المرشد بنجاح');
     }
 
-    public function edit($id)
+    public function store(StoreGuideRequest $request)
     {
-        $guide = $this->service->getGuideById($id);
-        return view('admin.guides.edit', compact('guide'));
+        $data = $request->validated();
+        $this->guideService->create($data);
+
+        return redirect()
+            ->route('admin.guides.index')
+            ->with('success', 'Guide created successfully.');
     }
 
-    public function update(Request $request, $id)
+    public function show(Guide $guide)
     {
-        $guide = $this->service->getGuideById($id);
-
-        $data = $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'email|unique:guides,email,' . $id,
-            'phone' => 'string|max:20',
-            'status' => 'in:active,inactive',
+        return view('admin.guides.show', [
+            'guide' => $guide->load('trips'),
         ]);
-
-        $this->service->updateGuide($guide, $data);
-
-        return redirect()->route('admin.guides.index')->with('success', 'تم تحديث بيانات المرشد بنجاح');
     }
 
-    public function destroy($id)
+    public function edit(Guide $guide)
     {
-        $guide = $this->service->getGuideById($id);
-        $this->service->deleteGuide($guide);
+        return view('admin.guides.edit', [
+            'guide' => $guide,
+            'trips' => Trip::orderBy('title')->get(['id', 'title']),
+        ]);
+    }
 
-        return redirect()->route('admin.guides.index')->with('success', 'تم حذف المرشد بنجاح');
+    public function update(UpdateGuideRequest $request, Guide $guide): RedirectResponse
+    {
+        $data = $request->validated();
+
+        $this->guideService->update($guide, $data);
+
+        return redirect()
+            ->route('admin.guides.index')
+            ->with('success', 'Guide updated successfully.');
+    }
+
+    public function destroy(Guide $guide)
+    {
+        $this->guideService->delete($guide);
+
+        return redirect()
+            ->route('admin.guides.index')
+            ->with('success', 'Guide deleted successfully.');
     }
 }
