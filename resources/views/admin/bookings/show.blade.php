@@ -36,7 +36,7 @@
         </div>
 
         <div class="detail-panel">
-            <h2 class="stat-section-title" style="margin-top:0">Flight</h2>
+            <h2 class="stat-section-title" style="margin-top:0">Trip</h2>
             <p style="font-family:var(--font-body)">{{ $booking->trip->title ?? 'N/A' }}</p>
             <p style="color:var(--ink-soft);font-size:0.875rem">Start: {{ optional($booking->trip?->start_date)->format('Y-m-d') }}</p>
         </div>

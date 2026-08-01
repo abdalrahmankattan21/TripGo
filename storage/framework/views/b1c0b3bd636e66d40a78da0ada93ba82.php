@@ -32,7 +32,7 @@
 <?php $__env->startSection('content'); ?>
     <form method="GET" action="<?php echo e(route('admin.bookings.index')); ?>" class="admin-panel admin-panel--padded filter-bar">
         <div class="filter-field">
-            <label for="trip_id">Flight</label>
+            <label for="trip_id">Trip</label>
             <select id="trip_id" name="trip_id" class="form-select">
                 <option value="">All</option>
                 <?php $__currentLoopData = $trips; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $trip): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -76,7 +76,7 @@
             <thead>
                 <tr>
                     <th>Pilgrim</th>
-                    <th>Flight</th>
+                    <th>Trip</th>
                     <th>Seats</th>
                     <th>Total</th>
                     <th>Status</th>

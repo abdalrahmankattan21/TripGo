@@ -26,8 +26,8 @@ class WaitingListSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
 
-            $user = User::inRandomOrder()->first();
-
+            $user = User::whereNotIn('id', WaitingList::pluck('user_id'))
+            ->inRandomOrder()->first();
             if (!$trip || !$user) {
                 break;
             }
@@ -57,7 +57,7 @@ class WaitingListSeeder extends Seeder
                     Companion::create([
                         'name' => fake()->name(),
                         'national_id' => fake()->unique()->randomNumber(9),
-                        'booking_id' => 1,
+                        'waiting_list_id' => $waitingList->id,
                     ]);
                 }
             });

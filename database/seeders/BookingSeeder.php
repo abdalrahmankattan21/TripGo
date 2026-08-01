@@ -63,10 +63,7 @@ class BookingSeeder extends Seeder
 
                 ]);
 
-                $trip->decrement(
-                    'available_seats',
-                    $seats
-                );
+                $trip->decrement('available_seats', $seats);
 
                 // Create Companions
                 for ($i = 0; $i < $seats - 1; $i++) {
@@ -80,7 +77,16 @@ class BookingSeeder extends Seeder
                     ]);
 
                 }
+
+                // Create Payment
+                Payment::create([
+                    'booking_id' => $booking->id,
+                    'amount' => $booking->total_price,
+                    'status' => 'paid',
+                    ]);
             });
+
+
 
             $created++;
         }
@@ -125,6 +131,7 @@ class BookingSeeder extends Seeder
             Payment::create([
                 "amount" => $seats * $trip->price,
                 "booking_id" => $booking->id,
+                "status" => "refund"
             ]);
             $created++;
         }
