@@ -1,49 +1,74 @@
 <?php
+
 namespace App\Services\Admin;
 
 use App\Models\Trip;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class AdminTripService
 {
-    // 1. جلب كافة الرحلات مع المرشدين
-    public function getAllTrips($perPage = 10)
+    public function list(array $filters = [])
     {
-        return Trip::latest()->paginate($perPage);
+        return Trip::with(['destination', 'category'])
+            ->when(!empty($filters['destination_id']), fn ($query) => $query->where('destination_id', $filters['destination_id']))
+            ->when(!empty($filters['category_id']), fn ($query) => $query->where('category_id', $filters['category_id']))
+            ->when(!empty($filters['status']), fn ($query) => $query->where('status', $filters['status']))
+            ->when(!empty($filters['start_date']), fn ($query) => $query->whereDate('start_date', $filters['start_date']))
+            ->latest()
+            ->paginate(15);
     }
 
-    // 2. جلب تفاصيل رحلة واحدة محددة
-    public function getTripById($id)
+    public function create(array $data, $image)
     {
-        return Trip::with('guides')->findOrFail($id);
+        if ($image !== null) {
+            $data['image'] = $this->storeImage($image);
+        }
+
+        $data['available_seats'] = $data['total_seats'];
+
+        return Trip::create($data);
     }
 
-    // 3. إنشاء رحلة جديدة
-    public function createTrip(array $data)
+    public function update(Trip $trip, array $data, $image)
     {
-        return Trip::create([
-            'destination' => $data['destination'],
-            'start_date'  => Carbon::parse($data['start_date']),
-            'end_date'    => Carbon::parse($data['end_date']),
-        ]);
+        if ($image !== null) {
+            $this->deleteImage($trip);
+            $data['image'] = $this->storeImage($image);
+        }
+
+        if (isset($data['total_seats']) && $data['total_seats'] != $trip->total_seats) {
+
+        $bookedSeats = $trip->total_seats - $trip->available_seats;
+
+        if ($data['total_seats'] < $bookedSeats) {
+            throw ValidationException::withMessages([
+            'total_seats' => "You cannot reduce the number of seats to {$data['total_seats']} because there are {$bookedSeats} booked seats."]);
+        }
+
+        $data['available_seats'] = $data['total_seats'] - $bookedSeats;
+
+        $trip->update($data);
+
+        return $trip->fresh();
+    }
     }
 
-    // 4. تحديث بيانات رحلة موجودة
-    public function updateTrip($id, array $data)
+    public function delete(Trip $trip)
     {
-        $trip = Trip::findOrFail($id);
-        $trip->update([
-            'destination' => $data['destination'],
-            'start_date'  => Carbon::parse($data['start_date']),
-            'end_date'    => Carbon::parse($data['end_date']),
-        ]);
-        return $trip;
+        $this->deleteImage($trip);
+        $trip->delete();
     }
 
-    // 5. حذف رحلة من النظام
-    public function deleteTrip($id)
+    private function storeImage($image)
     {
-        $trip = Trip::findOrFail($id);
-        return $trip->delete();
+        return $image->store('trips', 'public');
+    }
+
+    private function deleteImage(Trip $trip)
+    {
+        if ($trip->image) {
+            Storage::disk('public')->delete($trip->image);
+        }
     }
 }

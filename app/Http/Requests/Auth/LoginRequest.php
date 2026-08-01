@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,7 +18,15 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $user = User::where('email', $this->email)->first();
+
+        if (! $user || ! $user->is_admin) {
+            throw ValidationException::withMessages([
+            'email' => 'You are not authorized to access the admin panel.',
+            ]);
+    }
         return true;
+
     }
 
     /**

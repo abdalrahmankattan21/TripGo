@@ -32,9 +32,10 @@ class FullTripSeeder extends Seeder
             $trip = Trip::create([
                 'title' => "Full Trip ",
                 'description' => 'Enjoy a wonderful trip to Paris.',
+                'image' => 'image/png',
                 'departure_point' => fake()->address(),
                 'start_date' => now()->addDays(10),
-                'end_date' =>  now()->addDays(10)->addHours(5),
+                'end_date' =>  now()->addDays(10),
                 'booking_cancel_deadline' => now(),
                 'total_seats' => 5,
                 'available_seats' => 5,

@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <form method="POST" action="{{ route('admin.trips.update', $trip->id) }}" enctype="multipart/form-data" class="rounded-lg bg-white p-6 shadow">
+    <form method="POST" action="{{ route('admin.trips.update', $trip) }}" enctype="multipart/form-data" class="rounded-lg bg-white p-6 shadow">
         @csrf
         @method('PUT')
         @include('admin.trips._form')

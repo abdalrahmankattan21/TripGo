@@ -32,7 +32,7 @@
                 $reportLinks = [
                     'admin.reports.pilgrims-revenue' => 'Pilgrims and Revenue',
                     'admin.reports.popular-destinations' => 'Most Popular Destinations',
-                    'admin.reports.load-factor' => 'Flight Load Factor',
+                    'admin.reports.occupancy-rate' => 'Trip Occupancy Rate',
                     'admin.reports.monthly-revenue' => 'Monthly Revenue',
                     'admin.reports.cancellations' => 'Cancellation Reasons',
                 ];
