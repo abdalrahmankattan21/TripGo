@@ -3,86 +3,82 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Destination;
+use App\Http\Requests\trips\StoreTripRequest;
+use App\Http\Requests\trips\UpdateTripRequest;
 use App\Models\Category;
-use App\Models\Guide;
+use App\Models\Destination;
+use App\Models\Trip;
 use App\Services\Admin\AdminTripService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminTripController extends Controller
 {
-    protected $adminTripService;
-
-    public function __construct(AdminTripService $adminTripService)
-    {
-        $this->adminTripService = $adminTripService;
+    private  AdminTripService $tripService;
+    public function __construct(AdminTripService $tripService) {
+        $this->tripService = $tripService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $trips = $this->adminTripService->getAllTrips(10);
-        return view('admin.trips.index', compact('trips'));
+        $filters = $request->only(['destination_id', 'category_id', 'status', 'start_date']);
+
+        return view('admin.trips.index', array_merge([
+            'trips' => $this->tripService->list($filters),
+            'filters' => $filters,
+        ], $this->formOptions()));
     }
 
     public function create()
     {
-        $trip = null;
-        $destinations = Destination::all();
-        $categories = Category::all();
-        $guides = Guide::all();
-        return view('admin.trips.create', compact('trip', 'destinations', 'categories', 'guides'));
+        return view('admin.trips.create', $this->formOptions());
     }
 
-    // حفظ الرحلة الجديدة في قاعدة البيانات
-    public function store(Request $request)
+    public function store(StoreTripRequest $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'destination_id' => 'required|exists:destinations,id',
-            'start_date'  => 'required|date|after_or_equal:today',
-            'end_date'    => 'required|date|after:start_date',
-            'guides' => 'array|exists:guides,id',
+        $data = $request->validated();
+        $this->tripService->create($data, $request->file('image'));
+
+        return redirect()
+            ->route('admin.trips.index')
+            ->with('success', 'Trip created successfully.');
+    }
+
+    public function show(Trip $trip)
+    {
+        return view('admin.trips.show', [
+            'trip' => $trip->load(['destination', 'category']),
         ]);
-
-        $this->adminTripService->createTrip($validatedData);
-
-        return redirect('/admin/trips')->with('success', 'تم إنشاء الرحلة السياحية بنجاح.');
     }
 
-    public function show($id)
+    public function edit(Trip $trip)
     {
-        $trip = $this->adminTripService->getTripById($id);
-        return view('admin.trips.show', compact('trip'));
-    }
-    public function edit($id)
-    {
-        $trip = $this->adminTripService->getTripById($id);
-        $destinations = Destination::all();
-        $categories = Category::all();
-        $guides = Guide::all();
-        return view('admin.trips.edit', compact('trip','destinations', 'categories', 'guides'));
+        return view('admin.trips.edit', array_merge(['trip' => $trip], $this->formOptions()));
     }
 
-    // تحديث بيانات الرحلة المعدلة
-    public function update(Request $request, $id)
+    public function update(UpdateTripRequest $request, Trip $trip)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'destination_id' => 'required|exists:destinations,id',
-            'start_date'  => 'required|date|after_or_equal:today',
-            'end_date'    => 'required|date|after:start_date',
-            'slug' => 'required|string|max:255|unique:trips,slug',
-        ]);
+        $data = $request->validated();
+        $this->tripService->update($trip, $data, $request->file('image'));
 
-        $this->adminTripService->updateTrip($id, $validatedData);
-
-        return redirect('/admin/trips')->with('success', 'تم تحديث بيانات الرحلة بنجاح.');
+        return redirect()
+            ->route('admin.trips.index')
+            ->with('success', 'Trip updated successfully.');
     }
 
-    // حذف رحلة نهائياً
-    public function destroy($id)
+    public function destroy(Trip $trip): RedirectResponse
     {
-        $this->adminTripService->deleteTrip($id);
-        return redirect()->back()->with('success', 'تم حذف الرحلة بنجاح.');
+        $this->tripService->delete($trip);
+
+        return redirect()
+            ->route('admin.trips.index')
+            ->with('success', 'Trip deleted successfully.');
+    }
+    private function formOptions()
+    {
+        return [
+            'destinations' => Destination::orderBy('name')->get(),
+            'categories' => Category::orderBy('name')->get(),
+        ];
     }
 }

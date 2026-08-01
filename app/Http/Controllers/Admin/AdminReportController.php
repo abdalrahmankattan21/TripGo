@@ -37,12 +37,12 @@ class AdminReportController extends Controller
         ]);
     }
 
-    public function loadFactor(Request $request)
+    public function occupancyRate(Request $request)
     {
         $filters = $request->only(['destination_id', 'category_id', 'status']);
 
-        return view('admin.reports.load-factor', array_merge([
-            'rows' => $this->reportService->flightLoadFactor($filters),
+        return view('admin.reports.occupancy-rate', array_merge([
+            'rows' => $this->reportService->occupancyRate($filters),
             'filters' => $filters,
         ], $this->tripFilterOptions()));
     }

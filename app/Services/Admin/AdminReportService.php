@@ -47,14 +47,14 @@ class AdminReportService
             ]);
     }
 
-    public function flightLoadFactor(array $filters = [])
+    public function occupancyRate(array $filters = [])
     {
         return Trip::when(!empty($filters['destination_id']), fn ($q) => $q->where('destination_id', $filters['destination_id']))
             ->when(!empty($filters['category_id']), fn ($q) => $q->where('category_id', $filters['category_id']))
             ->get(['id', 'title', 'total_seats', 'available_seats'])
             ->map(function (Trip $trip) {
                 $bookedSeats = $trip->total_seats - $trip->available_seats;
-                $loadFactor = $trip->total_seats > 0
+                $occupancyRate = $trip->total_seats > 0
                     ? round(($bookedSeats / $trip->total_seats) * 100, 2)
                     : 0.0;
 
@@ -62,10 +62,10 @@ class AdminReportService
                     'flight_name' => $trip->title,
                     'booked_seats' => $bookedSeats,
                     'total_seats' => $trip->total_seats,
-                    'load_factor' => $loadFactor,
+                    'occupancy_rate' => $occupancyRate,
                 ];
             })
-            ->sortByDesc('load_factor')
+            ->sortByDesc('occupancy_rate')
             ->values();
     }
 

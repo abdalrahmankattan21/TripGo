@@ -1,16 +1,16 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Flight Load Factor')
+@section('title', 'Occpancy Rate')
 
 @section('breadcrumbs')
     <x-admin.breadcrumb :items="[
         ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
-        ['label' => 'Flight Load Factor'],
+        ['label' => 'Trip Occupancy Rate'],
     ]"/>
 @endsection
 
 @section('content')
-    <form method="GET" action="{{ route('admin.reports.load-factor') }}" class="admin-panel admin-panel--padded filter-bar">
+    <form method="GET" action="{{ route('admin.reports.occupancy-rate') }}" class="admin-panel admin-panel--padded filter-bar">
         <div class="filter-field">
             <label for="destination_id">Destination</label>
             <select id="destination_id" name="destination_id" class="form-select">
@@ -38,7 +38,7 @@
 
         <div class="filter-actions">
             <button type="submit" class="btn btn--primary">Filter</button>
-            <a href="{{ route('admin.reports.load-factor') }}" class="link-action link-action--view">Reset</a>
+            <a href="{{ route('admin.reports.occupancy-rate') }}" class="link-action link-action--view">Reset</a>
         </div>
     </form>
 
@@ -46,9 +46,9 @@
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>Flight</th>
+                    <th>Trip</th>
                     <th>Booked / Total Seats</th>
-                    <th>Load Factor</th>
+                    <th>Occupancy Rate</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,7 +56,7 @@
                     <tr>
                         <td>{{ $row['flight_name'] }}</td>
                         <td class="is-numeric">{{ $row['booked_seats'] }} / {{ $row['total_seats'] }}</td>
-                        <td class="is-numeric">{{ $row['load_factor'] }}%</td>
+                        <td class="is-numeric">{{ $row['occupancy_rate'] }}%</td>
                     </tr>
                 @empty
                     <tr><td colspan="3" class="table-empty">No data.</td></tr>

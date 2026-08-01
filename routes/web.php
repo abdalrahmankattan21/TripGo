@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::prefix('admin')
+    ->middleware('admin')
     ->name('admin.')
     ->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -37,7 +38,7 @@ Route::prefix('admin')
         Route::prefix('reports')->name('reports.')->group(function () {
             Route::get('pilgrims-revenue', [AdminReportController::class, 'pilgrimsRevenue'])->name('pilgrims-revenue');
             Route::get('popular-destinations', [AdminReportController::class, 'popularDestinations'])->name('popular-destinations');
-            Route::get('load-factor', [AdminReportController::class, 'loadFactor'])->name('load-factor');
+            Route::get('occupancy-rate', [AdminReportController::class, 'occupancyRate'])->name('occupancy-rate');
             Route::get('monthly-revenue', [AdminReportController::class, 'monthlyRevenue'])->name('monthly-revenue');
             Route::get('cancellations', [AdminReportController::class, 'cancellations'])->name('cancellations');
         });
