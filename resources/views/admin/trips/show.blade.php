@@ -13,7 +13,7 @@
 @section('content')
     <div class="rounded-lg bg-white p-6 shadow">
         @if ($trip->image)
-            <img src="{{$trip->image = "image" ? asset('image.jpg') : Storage::url($trip->image)}}" class="mb-4 h-48 w-full rounded object-cover">
+            <img src="{{$trip->image == "image" ? asset('images/trip.jpg') : Storage::url($trip->image)}}" class="mb-4 h-48 w-full rounded object-cover">
         @endif
 
         <div class="flex items-center justify-between">
@@ -29,6 +29,7 @@
             <div><dt class="text-gray-500">Price</dt><dd>{{ number_format($trip->price, 2) }}</dd></div>
             <div><dt class="text-gray-500">Departure Point</dt><dd>{{ $trip->departure_point }}</dd></div>
             <div><dt class="text-gray-500">Start Date</dt><dd>{{ optional($trip->start_date)->format('Y-m-d H:i') }}</dd></div>
+            <div><dt class="text-gray-500">End Date</dt><dd>{{ optional($trip->end_date)->format('Y-m-d H:i') }}</dd></div>
             <div><dt class="text-gray-500">Cancel Deadline</dt><dd>{{ optional($trip->booking_cancel_deadline)->format('Y-m-d H:i') }}</dd></div>
             <div><dt class="text-gray-500">Total Seats</dt><dd>{{ $trip->total_seats }}</dd></div>
             <div><dt class="text-gray-500">Available Seats</dt><dd>{{ $trip->available_seats }}</dd></div>

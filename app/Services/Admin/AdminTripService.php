@@ -46,12 +46,14 @@ class AdminTripService
             'total_seats' => "You cannot reduce the number of seats to {$data['total_seats']} because there are {$bookedSeats} booked seats."]);
         }
 
+
         $data['available_seats'] = $data['total_seats'] - $bookedSeats;
+        }
 
         $trip->update($data);
 
         return $trip->fresh();
-    }
+
     }
 
     public function delete(Trip $trip)
