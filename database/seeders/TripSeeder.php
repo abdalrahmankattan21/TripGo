@@ -28,7 +28,7 @@ public function run(): void
             [
                 'title' =>  "Trip " . ($i + 1),
                 'description' => fake()->text(),
-                'image' => 'public/image.png',
+                'image' => 'image',
                 'departure_point' => fake()->address(),
                 'destination_id' => Destination::inRandomOrder()->value('id'),
                 'category_id'=> Category::inRandomOrder()->value('id') ,

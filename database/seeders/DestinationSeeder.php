@@ -14,8 +14,8 @@ class DestinationSeeder extends Seeder
     public function run(): void
 {
     DB::table('destinations')->insert([
-        ['name' => 'Paris', 'description' => 'AL-Noor city', 'image' => 'paris.jpg', 'created_at' => now(), 'updated_at' => now()],
-        ['name' => 'Istanbul', 'description' => 'Al-Karten city', 'image' => 'istanbul.jpg', 'created_at' => now(), 'updated_at' => now()],
+        ['name' => 'Paris', 'description' => 'AL-Noor city', 'image' => 'image'],
+        ['name' => 'Istanbul', 'description' => 'Al-Karten city', 'image' =>'image'],
     ]);
 }
 }

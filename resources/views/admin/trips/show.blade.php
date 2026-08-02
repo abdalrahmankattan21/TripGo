@@ -13,7 +13,7 @@
 @section('content')
     <div class="rounded-lg bg-white p-6 shadow">
         @if ($trip->image)
-            <img src="{{ Storage::url($trip->image) }}" class="mb-4 h-48 w-full rounded object-cover">
+            <img src="{{$trip->image = "image" ? asset('image.jpg') : Storage::url($trip->image)}}" class="mb-4 h-48 w-full rounded object-cover">
         @endif
 
         <div class="flex items-center justify-between">
