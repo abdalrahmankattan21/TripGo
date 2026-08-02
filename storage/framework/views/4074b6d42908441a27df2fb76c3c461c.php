@@ -34,7 +34,7 @@
 <?php $__env->startSection('content'); ?>
     <div class="rounded-lg bg-white p-6 shadow">
         <?php if($trip->image): ?>
-            <img src="<?php echo e($trip->image != "image" ? Storage::url($trip->image) : asset('image.jpg')); ?>" class="mb-4 h-48 w-full rounded object-cover">
+            <img src="<?php echo e($trip->image == "image" ? asset('images/trip.jpg') : Storage::url($trip->image)); ?>" class="mb-4 h-48 w-full rounded object-cover">
         <?php endif; ?>
 
         <div class="flex items-center justify-between">
@@ -69,6 +69,7 @@
             <div><dt class="text-gray-500">Price</dt><dd><?php echo e(number_format($trip->price, 2)); ?></dd></div>
             <div><dt class="text-gray-500">Departure Point</dt><dd><?php echo e($trip->departure_point); ?></dd></div>
             <div><dt class="text-gray-500">Start Date</dt><dd><?php echo e(optional($trip->start_date)->format('Y-m-d H:i')); ?></dd></div>
+            <div><dt class="text-gray-500">End Date</dt><dd><?php echo e(optional($trip->end_date)->format('Y-m-d H:i')); ?></dd></div>
             <div><dt class="text-gray-500">Cancel Deadline</dt><dd><?php echo e(optional($trip->booking_cancel_deadline)->format('Y-m-d H:i')); ?></dd></div>
             <div><dt class="text-gray-500">Total Seats</dt><dd><?php echo e($trip->total_seats); ?></dd></div>
             <div><dt class="text-gray-500">Available Seats</dt><dd><?php echo e($trip->available_seats); ?></dd></div>

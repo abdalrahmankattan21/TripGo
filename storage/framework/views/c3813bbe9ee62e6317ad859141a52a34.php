@@ -12,7 +12,7 @@
     <div class="form-field form-field--full">
         <label class="form-label" for="image">Image</label>
         <?php if(!empty($trip?->image)): ?>
-            <img src="<?php echo e(Storage::url($trip->image)); ?>" class="form-thumb">
+            <img src="<?php echo e($trip->image == "image" ? asset('images/trip.jpg') :  Storage::url($trip->image)); ?>" class="form-thumb">
         <?php endif; ?>
         <input id="image" type="file" name="image" accept="image/*" class="form-file">
     </div>
