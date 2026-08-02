@@ -20,7 +20,7 @@ public function run(): void
 
         $trips = [];
         for ($i = 0; $i < 10; $i++) {
-        $startDate = Carbon::now()->addDays(($i * 7) + 10);
+        $startDate = now()->addDays(($i + 10));
         $endDate = (clone $startDate)->addDays(rand(5, 8));
         $totalSeats = rand(15, 30);
 

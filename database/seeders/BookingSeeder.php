@@ -29,7 +29,8 @@ class BookingSeeder extends Seeder
                 ->inRandomOrder()
                 ->first();
 
-            $user = User::inRandomOrder()->first();
+            $user = User::whereNotIn('id', Booking::pluck('user_id'))
+            ->inRandomOrder()->first();;
 
             if (!$trip || !$user) {
                 break;
@@ -112,7 +113,7 @@ class BookingSeeder extends Seeder
             }
 
             $seats = rand(1, 5);
-            $bookedAt = now();
+            $bookedAt = $trip->start_date->subDays(10);
             $booking = Booking::create([
                 'user_id' => $user->id,
                 'trip_id' => $trip->id,
@@ -122,7 +123,7 @@ class BookingSeeder extends Seeder
                 'booked_at' => $bookedAt,
                 'cancelled_at' => fake()->dateTimeBetween(
                 $bookedAt,
-                    $trip->booking_cancel_deadline,
+                $trip->booking_cancel_deadline,
                 ),
                 'cancellation_reason' => fake()->paragraph(),
 
