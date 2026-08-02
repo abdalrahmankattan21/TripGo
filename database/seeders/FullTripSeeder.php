@@ -35,7 +35,7 @@ class FullTripSeeder extends Seeder
                 'image' => 'image',
                 'departure_point' => fake()->address(),
                 'start_date' => now()->addDays(10),
-                'end_date' =>  now()->addDays(10),
+                'end_date' =>  now()->addDays(20),
                 'booking_cancel_deadline' => now(),
                 'total_seats' => 5,
                 'available_seats' => 5,
