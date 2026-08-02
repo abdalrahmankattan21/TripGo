@@ -34,7 +34,7 @@
 <?php $__env->startSection('content'); ?>
     <div class="rounded-lg bg-white p-6 shadow">
         <?php if($trip->image): ?>
-            <img src="<?php echo e(Storage::url($trip->image)); ?>" class="mb-4 h-48 w-full rounded object-cover">
+            <img src="<?php echo e($trip->image != "image" ? Storage::url($trip->image) : asset('image.jpg')); ?>" class="mb-4 h-48 w-full rounded object-cover">
         <?php endif; ?>
 
         <div class="flex items-center justify-between">

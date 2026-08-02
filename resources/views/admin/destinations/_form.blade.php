@@ -12,7 +12,7 @@
     <div class="form-field form-field--full">
         <label class="form-label" for="image">Image</label>
         @if (!empty($destination?->image))
-            <img src="{{ Storage::url($destination->image) }}" alt="{{ $destination->name }}" class="form-thumb">
+            <img src="{{$destination->image == "image" ? asset('images/destination.jpg') : Storage::url($destination->image) }}" alt="{{ $destination->name }}" class="form-thumb">
         @endif
         <input id="image" type="file" name="image" accept="image/*" class="form-file">
     </div>

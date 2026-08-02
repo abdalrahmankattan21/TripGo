@@ -53,7 +53,6 @@ class AdminDestinationController extends Controller
     public function update(UpdateDestinationRequest $request, Destination $destination)
     {
         $data = $request->validated();
-
         $this->destinationService->update($destination, $data, $request->file('image')
         );
 

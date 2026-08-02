@@ -5,7 +5,7 @@
 @section('content')
     <div class="rounded-lg bg-white p-6 shadow">
         @if ($destination->image)
-            <img src="{{ Storage::url($destination->image) }}" alt="{{ $destination->name }}"
+            <img src="{{$destination->image == 'image' ? asset('images/destination.jpg') : Storage::url($destination->image) }}" alt="{{ $destination->name }}"
                  class="mb-4 h-48 w-full rounded object-cover">
         @endif
 
