@@ -27,12 +27,12 @@ class ReviewController extends Controller
         return $this->success('Reviews retrieved successfully.', $this->reviewService->getAllReviews($trip));
     }
 
-    public function store(StoreReviewRequest $request)
+    public function store(Trip $trip, StoreReviewRequest $request)
     {
         try {
             $data = $request->validated();
             $data['user_id'] = auth()->id();
-            $review = $this->reviewService->create($data);
+            $review = $this->reviewService->create($data,$trip);
         }
         catch (BookingException $exception) {
             return $this->error($exception->getMessage(), $exception->getStatusCode());
@@ -43,8 +43,13 @@ class ReviewController extends Controller
     }
 
 
-    public function update(UpdateReviewRequest $request, Review $review)
+    public function update(Review $review, UpdateReviewRequest $request)
     {
+        $user = auth()->user();
+        if ($review->user_id !== $user->id) {
+                return $this->error('Unauthorized. You can only update your own reviews.', 403);
+        }
+
         try {
         $data = $request->validated();
         $data['user_id'] = auth()->id();
@@ -60,11 +65,17 @@ class ReviewController extends Controller
 
     public function destroy(Review $review)
     {
+        $user = auth()->user();
+        if ($review->user_id !== $user->id) {
+                return $this->error('Unauthorized. You can only delete your own reviews.', 403);
+        }
+
         try {
             $this->reviewService->delete($review);
         }
         catch (BookingException $exception) {
             return $this->error($exception->getMessage(), $exception->getStatusCode());
         }
+        return $this->success('Review deleted successfully.', null);
     }
 }
