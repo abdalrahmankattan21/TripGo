@@ -1,0 +1,830 @@
+{
+  "info": {
+    "_postman_id": "9f12f7b5-87d5-4f5f-8783-d00c6b2e7a82",
+    "name": "TripGo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31914369",
+    "_collection_link": "https://go.postman.co/collection/31914369-9f12f7b5-87d5-4f5f-8783-d00c6b2e7a82?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Api",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Register",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.environment.set(\"token\", pm.response.json().token);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "shoshio",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "sss@s.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "111",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/register",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.environment.set(\"token\", pm.response.json().token);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "admin@example.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345678",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/login",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/logout",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "logout"
+                  ],
+                  "query": [
+                    {
+                      "key": "Authorization",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/me",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Trips",
+          "item": [
+            {
+              "name": "Get All Trips",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/trips",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get trip",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/trips/3",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    "3"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Destinations",
+          "item": [
+            {
+              "name": "Get All Destinations",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/destinations",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "destinations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Destination",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/destinations/1",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "destinations",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "Get all Categories",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/categories",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Show Category",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/categories/1",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Bookings",
+          "item": [
+            {
+              "name": "Get All Bookings",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/bookings",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Booking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/bookings/1",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Booking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n   \"seats\": 2,\r\n   \"companions\": []\r\n   \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/trips/5/bookings",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "trips",
+                    "5",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancel Booking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"cancellation_reason\" : \"something\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/bookings/1",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "WaitingLists",
+          "item": [
+            {
+              "name": "Get All Waiting Lists",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/waiting-lists",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "waiting-lists"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Waiting List",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{URL}}/api/waiting-lists/1",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "waiting-lists",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Waiting List",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{URL}}/api/waiting-lists/5",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "waiting-lists",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reviews",
+          "item": [
+            {
+              "name": "Get All Reviews",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "if (response.token) {\r",
+                      "    pm.environment.set(\"token\", response.token);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n   \"seats\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/trips/5/reviews",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    "5",
+                    "reviews"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Review",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"rating\" : 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/trips/5/reviews",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "trips",
+                    "5",
+                    "reviews"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Review",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"rating\" : 2,\r\n    \"comment\" : \"Hello\"\r\n }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/reviews/6",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Review",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{URL}}/api/reviews/6",
+                  "host": [
+                    "{{URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reviews",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
