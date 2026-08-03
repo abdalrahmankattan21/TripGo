@@ -1,63 +1,116 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Trip Booking System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based backend for booking trips (e.g. tours, pilgrimages, group travel). It includes a public booking API for end users and a full admin dashboard for managing the platform.
 
-## About Laravel
+## What This Project Does
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Users can browse trips, book seats, and get automatically added to a waiting list if a trip is full — with automatic promotion to a real booking once a seat frees up. Admins get a complete dashboard panel to manage destinations, categories, trips, bookings, tour guides, and view business reports.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**For users (API)**
 
-## Learning Laravel
+- Browse destinations, categories, and available trips
+- Book a trip for yourself and any number of companions
+- Automatic waiting list when a trip is full, with automatic promotion and email when a seat opens up
+- Cancel a booking before the trip's cancellation deadline
+- View your own bookings and waiting-list entries
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**For admins (Dashboard)**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Overview dashboard with key stats (total trips, bookings, users, revenue, trips by status)
+- Manage destinations and categories (with search)
+- Manage trips (details, pricing, seats, image upload)
+- View bookings
+- Manage tour guides and assign them to trips
+- Five business reports: revenue per trip, popular destinations, trip occupancy rate, monthly revenue, and cancellations
 
-## Laravel Sponsors
+## Prerequisites
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2 or higher
+- Composer
+- Node.js and npm
+- A database (MySQL, PostgreSQL, or SQLite)
+- Postman for testing the API — collection linked below
 
-### Premium Partners
+## Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Install dependencies**
 
-## Contributing
+    ```bash
+    composer install
+    npm install
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Set up your environment file**
 
-## Code of Conduct
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    Then open `.env` and set your database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, etc.).
 
-## Security Vulnerabilities
+3. **Run the migrations and seed sample data**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    php artisan migrate
+    php artisan db:seed
+    ```
 
-## License
+4. **Set up JWT authentication**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# TripGo
->>>>>>> df5140ae4c76e31d7cb1093845561bfaf3b44e56
+    ```bash
+    php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+    php artisan jwt:secret
+    ```
+
+5. **Link storage**
+   Trip and destination images are uploaded to the `public` disk (`storage/app/public`) and served via `Storage::url()`. Without this, uploaded images will 404:
+
+    ```bash
+    php artisan storage:link
+    ```
+
+6. **Build the frontend assets**
+   Run this in its own terminal tab and leave it running (Breeze's Vite dev server, with hot reload):
+
+    ```bash
+    npm run dev
+    ```
+
+7. **Start the app**
+
+    ```bash
+    php artisan serve
+    ```
+
+## Default Admin Login
+
+```
+Email:    admin@gmail.com
+Password: admin
+```
+
+Log in at `/login`, then visit `/admin/dashboard`.
+
+## Authentication (JWT)
+
+The API routes in this project are written against `auth:sanctum`. If your project actually authenticates via **JWT** (`tymon/jwt-auth`) instead of Sanctum: `tymon/jwt-auth` is already listed in `composer.json`, so `composer install` (step 2 above) already pulled it in — you only need to publish its config and generate a secret:
+
+```bash
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+```
+
+## Testing the API with Postman
+
+A ready-to-import collection covering every endpoint (destinations, categories, trips, bookings, waiting lists) is available here:
+
+**Postman Collection:** `https://shayma-00012-s-team.postman.co/workspace/TripGo~81565c62-3535-4bce-a522-403bf0d19a18/collection/31914369-9f12f7b5-87d5-4f5f-8783-d00c6b2e7a82?action=share&creator=31914369&active-environment=31914369-45673651-4837-48bf-bfa5-abb0bb4d54f2`
+
+**To use it:**
+
+1. Open the link above and click **Run in Postman** (or **Import** it manually if you're viewing the raw file).
+2. Set the collection's `base_url` variable to your local URL (defaults to `http://localhost:8000/api`).
+3. Log in through your app's auth endpoint, copy the token, and set it as the collection's `token` variable — every request is pre-configured to send it as a Bearer token.
