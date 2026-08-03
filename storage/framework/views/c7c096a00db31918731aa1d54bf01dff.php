@@ -41,6 +41,13 @@
                     <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Destination</th>
                     <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Start Date</th>
                     <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">End Date</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Total Seats</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Available Seats</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Departure Point</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Price</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Description</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Category</th>
+                    <th class="px-4 py-0.5 text-left text-xs font-medium uppercase text-ellipsis text-gray-500">Status</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
@@ -49,6 +56,14 @@
                     <td class="px-4 py-3"><?php echo e($trip->destination->name); ?></td>
                     <td class="px-4 py-3"><?php echo e(\Carbon\Carbon::parse($trip->start_date)->format('Y-m-d')); ?></td>
                     <td class="px-4 py-3"><?php echo e(\Carbon\Carbon::parse($trip->end_date)->format('Y-m-d')); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->total_seats); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->available_seats); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->departure_point); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->price); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->description); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->category->name); ?></td>
+                    <td class="px-4 py-3"><?php echo e($trip->status); ?></td>
+
                 </tr>
             </tbody>
         </table>

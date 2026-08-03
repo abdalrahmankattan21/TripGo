@@ -80,6 +80,7 @@ class BookingController extends Controller
     public function cancel(Booking $booking, CancelBookingRequest $request)
     {
         $data =  $request->validated();
+        
         try {
             $result = $this->bookingService->cancelBooking($booking, auth()->id(), $data);
         } catch (BookingException $exception) {

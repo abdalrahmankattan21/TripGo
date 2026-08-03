@@ -89,8 +89,9 @@
 <div class="mb-4">
     <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
     <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-        <option value="active" {{ old('status', $trip->status ?? '') == 'active' ? 'selected' : '' }}>Active</option>
-        <option value="inactive" {{ old('status', $trip->status ?? '') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+        <option value="scheduled" {{ old('status', $trip->status ?? '') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+        <option value="in-progress" {{ old('status', $trip->status ?? '') == 'in-progress' ? 'selected' : '' }}>In Progress </option>
+        <option value="completed" {{ old('status', $trip->status ?? '') == 'completed' ? 'selected' : '' }}>Completed</option>
     </select>
     @error('status')
         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

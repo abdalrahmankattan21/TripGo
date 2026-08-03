@@ -159,8 +159,9 @@ unset($__errorArgs, $__bag); ?>
 <div class="mb-4">
     <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
     <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-        <option value="active" <?php echo e(old('status', $trip->status ?? '') == 'active' ? 'selected' : ''); ?>>Active</option>
-        <option value="inactive" <?php echo e(old('status', $trip->status ?? '') == 'inactive' ? 'selected' : ''); ?>>Inactive</option>
+        <option value="scheduled" <?php echo e(old('status', $trip->status ?? '') == 'scheduled' ? 'selected' : ''); ?>>Scheduled</option>
+        <option value="in-progress" <?php echo e(old('status', $trip->status ?? '') == 'in-progress' ? 'selected' : ''); ?>>In Progress </option>
+        <option value="completed" <?php echo e(old('status', $trip->status ?? '') == 'completed' ? 'selected' : ''); ?>>Completed</option>
     </select>
     <?php $__errorArgs = ['status'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');

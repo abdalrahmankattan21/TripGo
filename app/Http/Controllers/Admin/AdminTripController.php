@@ -7,21 +7,34 @@ use App\Models\Destination;
 use App\Models\Category;
 use App\Models\Guide;
 use App\Services\Admin\AdminTripService;
+use App\Services\Admin\AdminDestinationService;
+use App\Services\Admin\AdminCategoryService;
 use Illuminate\Http\Request;
 
 class AdminTripController extends Controller
 {
     protected $adminTripService;
+    protected $adminDestinationService;
+    protected $adminCategoryService;
 
-    public function __construct(AdminTripService $adminTripService)
+    public function __construct(AdminTripService $adminTripService, AdminDestinationService $adminDestinationService, AdminCategoryService $adminCategoryService)
     {
         $this->adminTripService = $adminTripService;
+        $this->adminDestinationService = $adminDestinationService;
+        $this->adminCategoryService = $adminCategoryService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $trips = $this->adminTripService->getAllTrips(10);
-        return view('admin.trips.index', compact('trips'));
+
+        // dd($request->all());
+        $filters = $request->only(['trip_id', 'status', 'date_from', 'date_to', 'destination_id', 'category_id']);
+        return view('admin.trips.index', [
+            'trips' => $this->adminTripService->getAllTrips($filters),
+            'destinations' =>$this->adminDestinationService->list($filters['destination_id'] ?? null),
+            'categories' => $this->adminCategoryService->list($filters['category_id'] ?? null),
+            'filters' => $filters,
+        ]);
     }
 
     public function create()
@@ -41,6 +54,12 @@ class AdminTripController extends Controller
             'destination_id' => 'required|exists:destinations,id',
             'start_date'  => 'required|date|after_or_equal:today',
             'end_date'    => 'required|date|after:start_date',
+            'total_seats' => 'required|integer|min:1',
+            'departure_point' => 'required|string|max:255',
+            'price' => 'required|decimal:2|min:0',
+            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+            'status' => 'required|in:scheduled,in-progress,completed',
             'guides' => 'array|exists:guides,id',
         ]);
 
@@ -71,7 +90,13 @@ class AdminTripController extends Controller
             'destination_id' => 'required|exists:destinations,id',
             'start_date'  => 'required|date|after_or_equal:today',
             'end_date'    => 'required|date|after:start_date',
-            'slug' => 'required|string|max:255|unique:trips,slug',
+            'total_seats' => 'required|integer|min:1',
+            'departure_point' => 'required|string|max:255',
+            'price' => 'required|decimal:2|min:0',
+            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+            'status' => 'required|in:scheduled,in-progress,completed',
+            'guides' => 'array|exists:guides,id',
         ]);
 
         $this->adminTripService->updateTrip($id, $validatedData);

@@ -78,11 +78,11 @@ class AuthController extends Controller
             ->first();
 
         if (!$otpVerification || $otpVerification->otp_code !== $validatedData['otp']) {
-            return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP.']);
+            return response()->json(['message' => 'Invalid or expired OTP.'], 422);
         }
 
         if (Carbon::now()->gt(Carbon::parse($otpVerification->expires_at))) {
-            return redirect()->back()->withErrors(['otp' => 'OTP has expired.']);
+            return response()->json(['message' => 'OTP has expired.'], 422);
         }
 
         // Mark the user as verified
@@ -97,8 +97,10 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        // Redirect to the dashboard
 
-        return redirect()->route('dashboard')->with('success', 'Account verified successfully.');
+        return response()->json([
+            'message' => 'Account verified successfully.',
+            'user' => $user,
+        ]);
     }
 }

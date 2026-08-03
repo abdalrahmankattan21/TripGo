@@ -9,6 +9,8 @@ use App\Models\Payment;
 use App\Models\Trip;
 use App\Models\WaitingList;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingPromotedMail;
 
 class BookingService
 {
@@ -57,8 +59,8 @@ class BookingService
 
             $trip->increment('available_seats', $booking->seats);
             $trip->refresh();
-
             $promotedBooking = $this->promoteNextWaitingUser($trip, $booking->seats);
+
 
             return [
                 'booking' => $booking->fresh(),
@@ -91,6 +93,7 @@ class BookingService
         $promotedBooking->loadMissing(['user', 'trip']);
 
         // TODO: send email
+        app('mailer')->to($promotedBooking->user->email)->send(new BookingPromotedMail($promotedBooking));
     }
 
 
@@ -176,7 +179,7 @@ class BookingService
         $waitingList = WaitingList::create([
             'user_id' => $userId,
             'trip_id' => $trip->id,
-            'seats' => $seats,
+            'seats_requested' => $seats,
             'position' => $lastPosition + 1,
             'status' => 'waiting',
         ]);

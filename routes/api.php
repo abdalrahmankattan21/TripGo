@@ -18,6 +18,7 @@ Route::get('/trips/{trip}', [TripController::class, 'show']);
 
 // Auth Routes
 Route::post('register', [AuthController::class, 'register']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify-otp.submit');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 

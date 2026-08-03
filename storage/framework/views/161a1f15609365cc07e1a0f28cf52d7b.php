@@ -1,95 +1,80 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المرشدين</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fc; padding: 20px; }
-        .container { max-width: 1300px; margin: auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 15px; }
-        .filters { display: flex; flex-wrap: wrap; gap: 12px; background: #f1f5f9; padding: 20px; border-radius: 10px; margin-bottom: 25px; align-items: center; }
-        .filters input, .filters select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: white; min-width: 150px; }
-        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; color: white; font-weight: bold; transition: 0.3s; }
-        .btn-primary { background: #3498db; }
-        .btn-warning { background: #f39c12; }
-        .btn-danger { background: #e74c3c; }
-        .btn-sm { padding: 5px 10px; font-size: 13px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { background: #2c3e50; color: white; padding: 12px; text-align: center; }
-        td { padding: 12px; text-align: center; border-bottom: 1px solid #ecf0f1; }
-        .badge { padding: 5px 12px; border-radius: 20px; color: white; font-size: 13px; font-weight: bold; }
-        .badge-active { background: #27ae60; }
-        .badge-inactive { background: #e74c3c; }
-        .actions form { display: inline-block; margin: 0; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>🧑‍🏫 إدارة المرشدين السياحيين</h1>
+<?php $__env->startSection('title', 'Tour Guides'); ?>
 
-    
-    <form method="GET" action="<?php echo e(route('admin.guides.index')); ?>" class="filters">
-        <input type="text" name="name" placeholder="اسم المرشد" value="<?php echo e(request('name')); ?>">
-        <input type="email" name="email" placeholder=" البريد الإلكتروني" value="<?php echo e(request('email')); ?>">
-        <input type="text" name="phone" placeholder=" رقم الهاتف" value="<?php echo e(request('phone')); ?>">
+<?php $__env->startSection('breadcrumbs'); ?>
+    <?php if (isset($component)) { $__componentOriginaldbbc880c47f621cda59b70d6eb356b2f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginaldbbc880c47f621cda59b70d6eb356b2f = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.admin.breadcrumb','data' => ['items' => [
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Tour Guides'],
+    ]]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin.breadcrumb'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['items' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute([
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Tour Guides'],
+    ])]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginaldbbc880c47f621cda59b70d6eb356b2f)): ?>
+<?php $attributes = $__attributesOriginaldbbc880c47f621cda59b70d6eb356b2f; ?>
+<?php unset($__attributesOriginaldbbc880c47f621cda59b70d6eb356b2f); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginaldbbc880c47f621cda59b70d6eb356b2f)): ?>
+<?php $component = $__componentOriginaldbbc880c47f621cda59b70d6eb356b2f; ?>
+<?php unset($__componentOriginaldbbc880c47f621cda59b70d6eb356b2f); ?>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
 
-        <select name="status">
-            <option value="">كل الحالات</option>
-            <option value="active" <?php echo e(request('status') == 'active' ? 'selected' : ''); ?>>نشط</option>
-            <option value="inactive" <?php echo e(request('status') == 'inactive' ? 'selected' : ''); ?>>غير نشط</option>
-        </select>
+<?php $__env->startSection('content'); ?>
+    <div class="mb-4 flex items-center justify-between gap-4">
+        <form method="GET" action="<?php echo e(route('admin.guides.index')); ?>" class="flex-1 max-w-sm">
+            <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="Search by name..."  class="w-full rounded border-gray-300 text-sm">
+        </form>
 
-        <button type="submit" class="btn btn-primary">بحث / فلترة</button>
-        <a href="<?php echo e(route('admin.guides.index')); ?>" class="btn btn-warning">إلغاء</a>
-        <a href="<?php echo e(route('admin.guides.create')); ?>" class="btn btn-primary" style="background: #27ae60;">➕ إضافة مرشد جديد</a>
-    </form>
+        <a href="<?php echo e(route('admin.guides.create')); ?>" class="rounded bg-gray-900 px-4 py-2 text-white">+ New Guide</a>
+    </div>
 
-    
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>الاسم</th>
-                <th>البريد الإلكتروني</th>
-                <th>رقم الهاتف</th>
-                <th>الحالة</th>
-                <th>الإجراءات</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $__empty_1 = true; $__currentLoopData = $guides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $guide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <td><?php echo e($guide->id); ?></td>
-                    <td><?php echo e($guide->name); ?></td>
-                    <td><?php echo e($guide->email); ?></td>
-                    <td><?php echo e($guide->phone); ?></td>
-                    <td>
-                        <span class="badge badge-<?php echo e($guide->status); ?>">
-                            <?php echo e($guide->status == 'active' ? 'نشط' : 'غير نشط'); ?>
-
-                        </span>
-                    </td>
-                    <td class="actions">
-                        <a href="<?php echo e(route('admin.guides.show', $guide->id)); ?>" class="btn btn-primary btn-sm">عرض</a>
-                        <a href="<?php echo e(route('admin.guides.edit', $guide->id)); ?>" class="btn btn-warning btn-sm">تعديل</a>
-                        <form action="<?php echo e(route('admin.guides.destroy', $guide->id)); ?>" method="POST" style="display:inline;">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</button>
-                        </form>
-                    </td>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Name</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Email</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Phone</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Assigned Flights</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Actions</th>
                 </tr>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                <tr>
-                    <td colspan="6" style="padding: 40px; color: #95a5a6;">لا يوجد مرشدون لعرضهم حالياً</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-    <?php echo e($guides->withQueryString()->links()); ?>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <?php $__empty_1 = true; $__currentLoopData = $guides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $guide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr>
+                        <td class="px-4 py-3"><?php echo e($guide->name); ?></td>
+                        <td class="px-4 py-3"><?php echo e($guide->email); ?></td>
+                        <td class="px-4 py-3"><?php echo e($guide->phone ?? '—'); ?></td>
+                        <td class="px-4 py-3"><?php echo e($guide->trips_count); ?></td>
+                        <td class="px-4 py-3 space-x-2 text-right">
+                            <a href="<?php echo e(route('admin.guides.show', $guide)); ?>" class="text-blue-600 hover:underline">View</a>
+                            <a href="<?php echo e(route('admin.guides.edit', $guide)); ?>" class="text-amber-600 hover:underline">Edit</a>
+                            <form action="<?php echo e(route('admin.guides.destroy', $guide)); ?>" method="POST" style="display:inline"
+                                  onsubmit="return confirm('Delete this guide?');">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
+                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <tr><td colspan="5" class="table-empty">No guides found.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-</div>
-</body>
-</html>
-<?php /**PATH C:\xampp\htdocs\Xacademy Tasks\TripGo\resources\views/admin/guides/index.blade.php ENDPATH**/ ?>
+    <div style="margin-top:1rem"><?php echo e($guides->links()); ?></div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\Xacademy Tasks\TripGo\resources\views/admin/guides/index.blade.php ENDPATH**/ ?>

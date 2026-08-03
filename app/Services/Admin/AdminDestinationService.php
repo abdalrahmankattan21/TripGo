@@ -9,10 +9,12 @@ class AdminDestinationService
 {
     public function list($search = null)
     {
+
         return Destination::withCount('trips')
             ->Search($search)
             ->latest()
             ->paginate(15);
+
     }
 
     public function create(array $data, $image = null)
