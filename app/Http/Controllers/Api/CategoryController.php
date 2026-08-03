@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Services\CategoryService;
 use App\Traits\ApiResponseTrait;
 
@@ -20,6 +21,14 @@ class CategoryController extends Controller
         return $this->success(
             'Categories retrieved successfully.',
             $this->categoryService->getAllCategories()
+        );
+    }
+
+    public function show(Category $category)
+    {
+        return $this->success(
+            'Category details retrieved successfully.',
+            $category
         );
     }
 }
