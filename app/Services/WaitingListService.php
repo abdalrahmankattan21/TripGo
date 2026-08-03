@@ -27,8 +27,7 @@ class WaitingListService
     public function leaveWaitingList(WaitingList $waitingList, int $userId)
     {
         return DB::transaction(function () use ($waitingList, $userId) {
-            $waitingList = WaitingList::where($waitingList->id)->first();
-
+            $waitingList = WaitingList::where('id', $waitingList->id)->first();
             $this->checkIfWaitingListBelongsToUser($waitingList, $userId);
             $this->checkIfStillWaiting($waitingList);
 

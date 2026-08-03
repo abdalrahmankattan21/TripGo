@@ -88,9 +88,6 @@ class BookingController extends Controller
 
         $message = 'Booking cancelled successfully.';
 
-        if ($result['promotion'] !== null) {
-            $message .= ' A user from the waiting list has been promoted to a confirmed booking.';
-        }
 
         return $this->success($message, [
             'booking' => $result['booking'],

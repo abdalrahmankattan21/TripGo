@@ -50,6 +50,3 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
 });
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
