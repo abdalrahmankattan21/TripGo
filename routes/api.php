@@ -40,13 +40,12 @@ Route::delete('/waiting-lists/{waitingList}', [WaitingListController::class, 'de
 });
 
 
-Route::get('/reviews', [ReviewController::class, 'index']);
-Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+Route::get('/trips/{trip}/reviews', [ReviewController::class, 'index']);
 
 
 Route::middleware('auth:api')->group(function () {
-    Route::post('/reviews', [ReviewController::class, 'store']);
-    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
-    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+    Route::post('/trips/{trip}/reviews', [ReviewController::class, 'store']);
+    Route::put('/trips/{trip}reviews/{review}', [ReviewController::class, 'update']);
+    Route::delete('/trips/{trip}/reviews/{review}', [ReviewController::class, 'destroy']);
 });
 

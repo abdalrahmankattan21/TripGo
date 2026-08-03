@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         GuideSeeder::class,
         GuideTripSeeder::class,
         BookingSeeder::class,
+        CompletedTripSeeder::class,
         WaitingListSeeder::class,
         ReviewSeeder::class,
         ]);
