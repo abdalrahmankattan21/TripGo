@@ -129,6 +129,19 @@ class BookingSeeder extends Seeder
 
             ]);
 
+             // Create Companions
+                for ($i = 0; $i < $seats - 1; $i++) {
+
+                    Companion::create([
+                        'booking_id' => $booking->id,
+                        'name' => fake()->name(),
+                        'national_id' => fake()->unique()->randomNumber(9),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                }
+
             Payment::create([
                 "amount" => $seats * $trip->price,
                 "booking_id" => $booking->id,

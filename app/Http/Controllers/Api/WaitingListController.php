@@ -47,7 +47,7 @@ class WaitingListController extends Controller
     /**
      * Delete the specified resource.
      */
-    public function destroy(WaitingList $waitingList): JsonResponse
+    public function destroy(WaitingList $waitingList)
     {
         try {
             $waitingList = $this->waitingListService->leaveWaitingList($waitingList, auth()->id());
