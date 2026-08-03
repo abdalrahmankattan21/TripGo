@@ -12,7 +12,11 @@ use Illuminate\Http\Request;
 
 // Public Routes
 Route::get('/destinations', [DestinationController::class, 'index']);
+Route::get('/destinations/{destination}', [DestinationController::class, 'show']);
+
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{category}', [CategoryController::class, 'show']);
+
 Route::get('/trips', [TripController::class, 'index']);
 Route::get('/trips/{trip}', [TripController::class, 'show']);
 

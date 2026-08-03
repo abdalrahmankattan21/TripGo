@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Destination;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,9 +14,9 @@ class DestinationSeeder extends Seeder
      */
     public function run(): void
 {
-    DB::table('destinations')->insert([
-        ['name' => 'Paris', 'description' => 'AL-Noor city', 'image' => 'image'],
-        ['name' => 'Istanbul', 'description' => 'Al-Karten city', 'image' =>'image'],
+    Destination::insert([
+        ['name' => 'Paris', 'description' => 'AL-Noor city', 'image' => 'image', 'created_at' => now(), 'updated_at' => now()],
+        ['name' => 'Istanbul', 'description' => 'Al-Karten city', 'image' =>'image', 'created_at' => now(), 'updated_at' => now()],
     ]);
 }
 }
