@@ -1,88 +1,70 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\BookingException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\reviews\StoreReviewRequest;
+use App\Http\Requests\reviews\UpdateReviewRequest;
+use App\Models\Review;
+use App\Models\Trip;
 use App\Services\ReviewService;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    protected $reviewService;
+    use ApiResponseTrait;
+    protected ReviewService $reviewService;
 
-    // حقن الخدمة بشكل عادي بدون أي ميثود middleware
     public function __construct(ReviewService $reviewService)
     {
         $this->reviewService = $reviewService;
     }
 
-    /**
-     * 1. عرض كل التقييمات
-     */
-    public function index()
+    public function index(Trip $trip)
     {
-        $reviews = $this->reviewService->getAllReviews();
-        return response()->json(['success' => true, 'data' => $reviews], 200);
+        return $this->success('Reviews retrieved successfully.', $this->reviewService->getAllReviews($trip));
     }
 
-    /**
-     * 2. عرض تقييم واحد محدد
-     */
-    public function show($id)
+    public function store(StoreReviewRequest $request)
     {
-        $review = $this->reviewService->getReviewById($id);
-        return response()->json(['success' => true, 'data' => $review], 200);
-    }
-
-    /**
-     * 3. إنشاء تقييم جديد
-     */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'trip_id'  => 'required|exists:trips,id',
-            'rating'   => 'required|integer|min:1|max:5',
-            'comment'  => 'nullable|string|max:1000',
-        ]);
-
-        $validatedData['user_id'] = auth()->id();
-
         try {
-            $review = $this->reviewService->createTripReview($validatedData);
-            return response()->json(['success' => true, 'message' => 'تم إضافة التقييم.', 'data' => $review], 201);
-        } catch (ValidationException $e) {
-            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            $data = $request->validated();
+            $data['user_id'] = auth()->id();
+            $review = $this->reviewService->create($data);
         }
-    }
-
-    /**
-     * 4. تحديث تقييم موجود
-     */
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'rating'   => 'required|integer|min:1|max:5',
-            'comment'  => 'nullable|string|max:1000',
-        ]);
-
-        try {
-            $review = $this->reviewService->updateReview($id, $validatedData, auth()->id());
-            return response()->json(['success' => true, 'message' => 'تم تحديث التقييم.', 'data' => $review], 200);
-        } catch (ValidationException $e) {
-            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+        catch (BookingException $exception) {
+            return $this->error($exception->getMessage(), $exception->getStatusCode());
         }
+
+
+        return $this->success('Review created successfully.', $review, 201);
     }
 
-    /**
-     * 5. حذف التقييم
-     */
-    public function destroy($id)
+
+    public function update(UpdateReviewRequest $request, Review $review)
     {
         try {
-            $this->reviewService->deleteReview($id, auth()->id());
-            return response()->json(['success' => true, 'message' => 'تم حذف التقييم بنجاح.'], 200);
-        } catch (ValidationException $e) {
-            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        $review = $this->reviewService->update($review, $data);
+        }
+        catch (BookingException $exception) {
+            return $this->error($exception->getMessage(), $exception->getStatusCode());
+        }
+        return $this->success('Review Updated successfully.', $review, 200);
+
+    }
+
+    public function destroy(Review $review)
+    {
+        try {
+            $this->reviewService->delete($review);
+        }
+        catch (BookingException $exception) {
+            return $this->error($exception->getMessage(), $exception->getStatusCode());
         }
     }
 }

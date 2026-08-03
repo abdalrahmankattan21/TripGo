@@ -6,25 +6,22 @@ use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
-class ReviewService 
+class ReviewService
 {
-    public function getAllReviews()
+    public function getAllReviews(Trip $trip)
     {
-        return Review::with(['trip', 'user'])->latest()->get();
+        return Review::with(['trip', 'user'])->where('trip_id', $trip->id)->latest()->get();
     }
 
-    
-    public function getReviewById($id)
+
+
+    public function create(array $data)
     {
-        return Review::with(['trip', 'user'])->findOrFail($id);
-    }
-    public function createTripReview(array $data)
-    {
-        $trip = Trip::findOrFail($data['trip_id']);
+        $trip = Trip::find($data['trip_id']);
 
         if (Carbon::now()->lt(Carbon::parse($trip->end_date))) {
             throw ValidationException::withMessages([
-                'trip_id' => 'لا يمكن تقييم هذه الرحلة لأنها لم تنتهِ بعد.'
+                'trip_id' => 'You Cannot Review this trip because the thip does not end yet.'
             ]);
         }
 
@@ -34,38 +31,23 @@ class ReviewService
 
         if ($alreadyReviewed) {
             throw ValidationException::withMessages([
-                'trip_id' => 'لقد قمت بتقييم هذه الرحلة مسبقاً، لا يمكنك إرسال تقييم آخر.'
+                'trip_id' => 'You already review the trip you cannot review it more than once.'
             ]);
         }
 
         return Review::create($data);
     }
 
-    public function updateReview($id, array $data, $userId)
+    public function update(Review $review, array $data)
     {
-        $review = Review::findOrFail($id);
-
-        if ($review->user_id !== $userId) {
-            throw ValidationException::withMessages([
-                'auth' => 'غير مصرح لك بتعديل هذا التقييم.'
-            ]);
-        }
-
         $review->update($data);
-        return $review;
+
+        return $review->fresh();
     }
 
-    public function deleteReview($id, $userId)
+    public function delete(Review $review)
     {
-        $review = Review::findOrFail($id);
-
-        if ($review->user_id !== $userId) {
-            throw ValidationException::withMessages([
-                'auth' => 'غير مصرح لك بحذف هذا التقييم.'
-            ]);
-        }
-
-        return $review->delete();
+        $review->delete();
     }
 
 }
