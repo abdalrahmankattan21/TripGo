@@ -15,9 +15,8 @@ class ReviewService
 
 
 
-    public function create(array $data)
+    public function create(array $data, Trip $trip)
     {
-        $trip = Trip::find($data['trip_id']);
 
         if (Carbon::now()->lt(Carbon::parse($trip->end_date))) {
             throw ValidationException::withMessages([
@@ -25,7 +24,7 @@ class ReviewService
             ]);
         }
 
-        $alreadyReviewed = Review::where('trip_id', $data['trip_id'])
+        $alreadyReviewed = Review::where('trip_id', $trip->id)
             ->where('user_id', $data['user_id'])
             ->exists();
 
@@ -34,6 +33,8 @@ class ReviewService
                 'trip_id' => 'You already review the trip you cannot review it more than once.'
             ]);
         }
+
+        $data['trip_id'] = $trip->id;
 
         return Review::create($data);
     }

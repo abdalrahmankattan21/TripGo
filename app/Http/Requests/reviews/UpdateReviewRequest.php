@@ -24,8 +24,7 @@ class UpdateReviewRequest extends FormRequest
     {
         return [
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
-            'comment' => ['nulable', 'string'],
-            'trip_id' => ['required', 'exists:trips,id']
+            'comment' => ['nullable', 'string'],
         ];
     }
 }
