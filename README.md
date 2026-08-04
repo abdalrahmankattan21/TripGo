@@ -60,6 +60,8 @@ Users can browse trips, book seats, and get automatically added to a waiting lis
 
 4. **Set up JWT authentication**
 
+    The API authenticates via **JWT** (`tymon/jwt-auth`) instead of Sanctum: `tymon/jwt-auth` is already listed in `composer.json`, so `composer install` already pulled it in — you only need to publish its config and generate a secret:
+
     ```bash
     php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
     php artisan jwt:secret
@@ -94,14 +96,17 @@ Password: admin
 
 Log in at `/login`, then visit `/admin/dashboard`.
 
-## Authentication (JWT)
+## Email Testing with Mailtrap
 
-The API routes in this project are written against `auth:sanctum`. If your project actually authenticates via **JWT** (`tymon/jwt-auth`) instead of Sanctum: `tymon/jwt-auth` is already listed in `composer.json`, so `composer install` (step 2 above) already pulled it in — you only need to publish its config and generate a secret:
+When a booking is cancelled and the first waiting-list user gets promoted to a real booking. To actually see that email locally instead of it trying to send for real point your .env at a Mailtrap sandbox inbox:
 
-```bash
-php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
-php artisan jwt:secret
-```
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=<your Mailtrap inbox username>
+MAIL_PASSWORD=<your Mailtrap inbox password>
+MAIL_FROM_ADDRESS="noreply@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
 
 ## Testing the API with Postman
 

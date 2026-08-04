@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminTripController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\SeatAvailableMail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -43,3 +46,4 @@ Route::prefix('admin')
             Route::get('cancellations', [AdminReportController::class, 'cancellations'])->name('cancellations');
         });
     });
+
