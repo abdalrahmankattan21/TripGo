@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\Exceptions\BookingException;
+use App\Mail\SeatAvailableMail;
 use App\Models\Booking;
 use App\Models\Companion;
 use App\Models\Payment;
 use App\Models\Trip;
 use App\Models\WaitingList;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class BookingService
 {
@@ -68,7 +70,11 @@ class BookingService
 
         if ($result['promotion'] !== null) {
             $this->notifyPromotedUser($result['promotion']);
+
         }
+
+
+
 
         return $result;
     }
@@ -89,8 +95,8 @@ class BookingService
     private function notifyPromotedUser(Booking $promotedBooking)
     {
         $promotedBooking->loadMissing(['user', 'trip']);
+        Mail::to($promotedBooking->user->email)->send(new SeatAvailableMail());
 
-        // TODO: send email
     }
 
 
@@ -203,7 +209,7 @@ class BookingService
     {
         $nextInLine = WaitingList::where('trip_id', $trip->id)
             ->where('status', 'waiting')
-            ->where('seats_requested', $seats)
+            ->where('seats_requested', '<=', $seats)
             ->orderBy('position')
             ->first();
 
@@ -233,6 +239,12 @@ class BookingService
         ]);
 
         $nextInLine->update(['status' => 'confirmed']);
+
+        $nextInLine->update([
+                'status' => 'notified',
+                'notified_at' => now(),
+                'expires_at' => now()->addHours(6),
+            ]);
 
         $trip->decrement('available_seats', $nextInLine->seats_requested);
 
